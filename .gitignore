@@ -1,0 +1,14 @@
+# object files
+*.o
+*.ko
+*.obj
+*.elf
+
+# executables
+*.out
+*.exe
+*.app
+*.hex
+
+# bkup
+*~
