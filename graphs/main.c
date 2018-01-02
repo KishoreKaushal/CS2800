@@ -47,12 +47,31 @@ int main() {
 		if(G.total_vertex!=0) {
 			printf("Adjacency List of the Input Graph: \n");
 			display_adj_list(&G);		// prints the adjacent list of the graph
+			printf("\n");
+		}
+		
+		
+		int x=0 , y=0, s;
+		//while(s=scanf(" %d %d" , &x , &y) , (s!=EOF)&&(x||y)) {
+		//	add_edge(&G , x , y);
+		//}
+		
+		while(s=scanf(" %d %d" , &x , &y) , (s!=EOF)&&(x||y)) {
+			printf("Removing edge between the vertex %d and %d\n" , x , y);
+			remove_edge(&G , x , y);
+		}
+		
+		if(G.total_vertex!=0) {
+			printf("Adjacency List of the Input Graph: \n");
+			display_adj_list(&G);		// prints the adjacent list of the graph
+			printf("\n");
 		}
 		
         clear_graph(&G);        	// free the memory allocated to the graph
 		if(G.total_vertex!=0) {
 			printf("Adjacency List of the Input Graph: \n");
 			display_adj_list(&G);		// prints the adjacent list of the graph
+			printf("\n");
 		}
 		
         fclose(stdin);

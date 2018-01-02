@@ -25,19 +25,26 @@ void clear_graph(graph *G) {
 
 /* tests whether there is an edge from the vertex x to the vertex y */	
 int adjacent(const graph *G, int x, int y) {
-	return contains(&G->adj_list[x] , (COMPARE) compare_int , &y);
+	if(0<=x && x<G->total_vertex && 0<=y && y<G->total_vertex && x!=y)
+		return contains(&G->adj_list[x] , (COMPARE) compare_int , &y);
+	else return 0;
 }
 
 /* lists all vertices y such that there is an edge from the vertex x to the vertex y*/
 void neighbors(const graph *G, int x) {
 	// prints the neighbours of vertex 'x'
-	display_list(&G->adj_list[x] , (DISPLAY)display_int);
-	printf("\n");
+	if(0<=x && x<G->total_vertex){
+		display_list(&G->adj_list[x] , (DISPLAY)display_int);
+		printf("\n");
+	}
 }
 
 /*adds the edge from the vertex x to the vertex y, if it is not there*/
 void add_edge(graph *G, int x, int y){
-	if(!adjacent(G , x , y)){
+	// necessary checks for the following function to work bug free
+	// self directed edges are not allowed : i.e x != y
+	
+	if(0<=x && x<G->total_vertex && 0<=y && y<G->total_vertex && x!=y && !adjacent(G , x , y)){
 		int *ptr = (int*)malloc(sizeof(int));
 		*ptr = y;
 		push_back(&G->adj_list[x] , ptr);	
@@ -46,7 +53,11 @@ void add_edge(graph *G, int x, int y){
 
 /*removes the edge from the vertex x to the vertex y, if it is there*/
 void remove_edge(graph *G, int x, int y){
-	node *nd = get_node(&G->adj_list[x] , (COMPARE)compare_int , &y);
-	if(nd) remove_node(&G->adj_list[x], nd);
+	// necessary checks for the following function to work bug free
+	// self directed edges are not allowed : i.e x != y
+	if(0<=x && x<G->total_vertex && 0<=y && y<G->total_vertex && x!=y){
+		node *nd = get_node(&G->adj_list[x] , (COMPARE)compare_int , &y);
+		if(nd!=NULL) remove_node(&G->adj_list[x], nd);	
+	}
 }
 
