@@ -29,16 +29,16 @@ typedef struct list{
     int size;
 } list;
 
-void initializeList(list*);                /* Initializes the linked lst */
+void initialize_list(list*);                /* Initializes the linked lst */
 int push_front(list*, void*);                 /* Adds data to the linked lists's front */
 int push_back(list*, void*);                 /* Adds data to the linked lst's back */
 void pop_front(list*);                      /* removes an element from the front of the list */
 void pop_back(list *);                      /* removes an element from the back of the list */
-
-void removeNode(list*, node*);               /* Removes a list from the linked lst */
-node *getNode(const list*, COMPARE , void*);   /* Returns a pointer to the list containing a specific data item */
-void displayList(const list*, DISPLAY);    /* Displays the linked lst */
-int listEmpty(const list*); /*Returns 1 if lst is empty */
-void clearList(list*); /* Free the allocated linked lst from the memory.*/
+int contains(const list* , COMPARE , void*);			/* check whether the data is contained in the list*/
+void remove_node(list*, node*);               /* Removes a list from the linked lst */
+node *get_node(const list*, COMPARE , void*);   /* Returns a pointer to the list containing a specific data item */
+void display_list(const list*, DISPLAY);    /* Displays the linked lst */
+int list_empty(const list*); /*Returns 1 if lst is empty */
+void clear_list(list*); /* Free the allocated linked lst from the memory.*/
 
 #endif // LIST_H

@@ -3,14 +3,14 @@
 #include "list.h"
 
 void pop_front(list* lst) {
-    removeNode(lst, lst->front);
+    remove_node(lst, lst->front);
 }
 
 void pop_back(list* lst) {
-    removeNode(lst , lst->back);
+    remove_node(lst , lst->back);
 }
 
-void initializeList(list *lst){
+void initialize_list(list *lst){
     lst->front = NULL;
     lst->back = NULL;
     lst->size = 0;
@@ -46,7 +46,7 @@ int push_back(list* lst, void* data){
     return 1;
 }
 
-void removeNode(list *lst, node *nd) {
+void remove_node(list *lst, node *nd) {
     void *data = nd->data;
     if (nd == lst->front) {
         if (lst->front->next == NULL) {
@@ -64,21 +64,21 @@ void removeNode(list *lst, node *nd) {
         }
     }
     lst->size--;
-    free(data);
     free(nd);
+    free(data);
 }
 
-int listEmpty(const list *lst) {
+int list_empty(const list *lst) {
     return (lst->front == NULL);
 }
 
-void clearList(list *lst) {
-    while(!listEmpty(lst)){
-        removeNode(lst, lst->front);
+void clear_list(list *lst) {
+    while(!list_empty(lst)){
+        remove_node(lst, lst->front);
     }
 }
 
-node *getNode(const list *lst, COMPARE compare, void *data){
+node *get_node(const list *lst, COMPARE compare, void *data){
     node *nd = lst->front;
     while(nd != NULL ){
         if(compare(nd->data, data) == 0){
@@ -89,11 +89,15 @@ node *getNode(const list *lst, COMPARE compare, void *data){
     return NULL;
 }
 
-void displayList(const list *lst , DISPLAY display){
+void display_list(const list *lst , DISPLAY display){
     //printf("Linked List\n");
     node *current = lst->front;
     while(current != NULL){
         display(current->data);
         current = current->next;
     }
+}
+
+int contains(const list* lst, COMPARE compare, void *data) {
+	return (get_node(lst , compare , data)!=NULL);
 }
