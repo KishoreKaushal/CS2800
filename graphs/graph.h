@@ -10,7 +10,7 @@ typedef struct graph {
     list *adjList;
 } graph ;
 
-void initializeGraph(graph *G , int V);
+void initialize_graph(graph *G , int V);
 
 /* tests whether there is an edge from the vertex x to the vertex y */
 int adjacent(graph *G, int x, int y);
@@ -29,5 +29,7 @@ void add_edge(graph *G, int x, int y);
 
 /*removes the edge from the vertex x to the vertex y, if it is there*/
 void remove_edge(graph *G, int x, int y);
+
+void clear_graph(graph *G);
 
 #endif // GRAPH_H
