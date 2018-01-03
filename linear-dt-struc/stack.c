@@ -1,68 +1,35 @@
 #include<stdio.h>
 #include<stdlib.h>
-#include "stack.h"
+#include "list.h"
 
-/* returns 1 if the stk s StkEmpty */
-int stkEmpty(const stack *stk) {
-    return (stk->top == NULL);
+/* Initializes the stack */
+void initialize_stack(stack *stk) {
+	initialize_list(stk);	
 }
 
-/* Initializes the stk */
-void initializeStack(stack *stk){
-    stk->top = NULL;
-    stk->bottom = NULL;
-    stk->size = 0;
+/* Pushes the data in the top of the stack */
+int push(stack *stk , void *data){
+	push_front(stk , data);	
 }
 
-/* push data onto the stk */
-int push(stack *stk, void *data){
-    node *newNode = (node *)malloc(sizeof(node));
-    if(newNode == NULL ) return FAILED;
-    newNode->data = data;
-    if(stk->top == NULL ) {
-        newNode->next = NULL;
-        stk->bottom = newNode;
-    } else {
-        newNode->next = stk->top;
-    }
-    stk->top = newNode;
-    stk->size += 1;
-    return SUCCESS;
+/* Pop the top data out of the stack */
+int pop(stack *stk){
+	pop_front(stk);
 }
 
-
-void *pop(stack *stk) {
-    node *nd = stk->top ;
-    if(nd == NULL) {
-        printf("Stack StkEmpty\n");
-        return NULL;
-    } else if (nd == stk->bottom) {
-        stk->top = stk->bottom = NULL;
-        void *data = nd->data;
-        free(nd);
-        stk->size-=1;
-        return data;
-    } else {
-        stk->top = stk->top->next;
-        void *data = nd->data;
-        free(nd);
-        stk->size-=1;
-        return data;
-    }
+/* Returns 1 if the stack is empty */
+int stack_empty(stack *stk) {
+	return (stk->front == NULL);
 }
 
-void clearStack(stack *stk){
-    node *nd;
-    nd  = stk->top;
-    while(1){
-        if(nd == NULL ) {
-            break;
-        }
-        stk->top = stk->top->next;
-        void *data= nd->data;
-        free(data);
-        free(nd);
-        nd = stk->top;
-    }
-    initializeStack(stk);
+/* Clear the memory allocated to the stack */
+void clear_stack(stack *stk) {
+	clear_list(stk);
+}
+
+/* Returns the pointer to the top node */
+node *get_top_node(stack *stk){
+	if(!stack_empty(stk)){
+		return stk->front;
+	}
 }

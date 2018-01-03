@@ -1,35 +1,12 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include "list.h"
 
-#ifndef STACK_H
-#define STACK_H
+typedef struct list stack;          /* Stack implementation using linked list */
 
-#define FAILED 0
-#define SUCCESS 1
-
-typedef void (*DISPLAY)(void*);         /* DISPLAY: type cast a function to void(*)(void*) */
-typedef int (*COMPARE)(void* , void*);  /* COMPARE: type cast a function to int(*)(void*, void*) */
-
-#ifndef NODE_H
-#define NODE_H
-
-typedef struct node{
-    void *data;
-    struct node *next;
-} node;
-
-#endif  // NODE_H
-
-typedef struct stack{
-    node *top;
-    node *bottom;
-    int size;
-} stack;
-
-void initializeStack(stack *) ;               /* Initializes Stack */
-void *pop(stack *);                           /* Pops an element out of the stk from the top */
-int push(stack *, void *);                    /* Pushes an element on the top of the stk */
-void clearStack(stack *);                   /* Silently destroy the whole stk */
-int stkEmpty(const stack *);                /* returns 1 if stk is stkEmpty */
-
-#endif // STACK_H
+void initialize_stack(stack *stk);  /* Initializes the stack */
+int push(stack *stk , void *data);  /* Pushes the data in the top of the stack */
+int pop(stack *stk);                /* Pop the top data out of the stack */
+node *get_top_node(stack *stk);     /* Returns the pointer to the top node */
+int stack_empty(stack *stk);        /* Returns 1 if the stack is empty */
+void clear_stack(stack *stk);       /* Clear the memory allocated to the stack */
