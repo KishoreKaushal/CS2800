@@ -1,7 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "list.h"
+#include "stack.h"
 #include "graph.h"
+
+#define NOT_DISCOVERED (0)
+#define DISCOVERED (1)
 
 void input_adjacency_list(graph *G) {
     int n; int *ptr;
@@ -14,6 +18,34 @@ void input_adjacency_list(graph *G) {
 			*ptr = n;
 			push_back(&G->adj_list[i] , ptr);	// push the neighbour in the adjacency list of that vertex
 		}
+    }
+}
+
+
+void DFS_iterative(graph *G , int V) {
+    // V : starting vertex
+    int *discovered = (int *)malloc(sizeof(int)*G->total_vertex);
+    for(int i=0; i<G->total_vertex; i++) discovered[i] = NOT_DISCOVERED;
+    
+    int W;
+    stack stk;
+    initialize_stack(&stk);
+    push_int(&stk , V);
+    
+    while(!stack_empty(&stk)) {
+        V = pop_int(&stk);
+        //printf("V: %d\n" , V);
+        if(discovered[V] == NOT_DISCOVERED) {
+            discovered[V] = DISCOVERED;
+            printf("%d " , V);
+            // for all edges from vertex V to W
+            node *nd = G->adj_list[V].front;
+            while(nd!=NULL) {
+                W = *(int*)(nd->data);
+                push_int(&stk , W);
+                nd = nd->next;
+            }
+        }
     }
 }
 
@@ -39,41 +71,10 @@ int main() {
         scanf(" %d" , &V);				// input the total vertex present
         initialize_graph(&G , V);		// initializing the graph
         input_adjacency_list(&G);			// input adjacency list
-		
-		printf("is there edge from %d to %d : %d\n" ,1 ,2,  adjacent(&G, 1 , 2));
-		printf("is there edge from %d to %d : %d\n" ,0 ,2,  adjacent(&G, 0 , 2));
-		printf("is there edge from %d to %d : %d\n" ,2 ,4,  adjacent(&G, 2 , 4));
-		
-		if(G.total_vertex!=0) {
-			printf("Adjacency List of the Input Graph: \n");
-			display_adj_list(&G);		// prints the adjacent list of the graph
-			printf("\n");
-		}
-		
-		
-		int x=0 , y=0, s;
-		//while(s=scanf(" %d %d" , &x , &y) , (s!=EOF)&&(x||y)) {
-		//	add_edge(&G , x , y);
-		//}
-		
-		while(s=scanf(" %d %d" , &x , &y) , (s!=EOF)&&(x||y)) {
-			printf("Removing edge between the vertex %d and %d\n" , x , y);
-			remove_edge(&G , x , y);
-		}
-		
-		if(G.total_vertex!=0) {
-			printf("Adjacency List of the Input Graph: \n");
-			display_adj_list(&G);		// prints the adjacent list of the graph
-			printf("\n");
-		}
+		display_adj_list(&G);
+		DFS_iterative(&G , 0);
 		
         clear_graph(&G);        	// free the memory allocated to the graph
-		if(G.total_vertex!=0) {
-			printf("Adjacency List of the Input Graph: \n");
-			display_adj_list(&G);		// prints the adjacent list of the graph
-			printf("\n");
-		}
-		
         fclose(stdin);
     }
     return 0;
