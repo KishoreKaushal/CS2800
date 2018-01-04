@@ -96,6 +96,7 @@ void display_adj_list(graph *G) {
 void display_edge_classification(graph *G, int *previsit , int *postvisit, int *traversal) {
 	node *itr_nd;
 	int u, v;
+	printf("Format : (u [u.start_time,u.end_time] --> v [v.start_time,v.end_time]) : EDGE_TYPE\n\n");
 	// iterate through all the edges using the adjacency list
 	// directed edge from u to v is represented as : (u , v) or (u --> v)
 	for(u=0; u<G->total_vertex; u++) {
@@ -128,15 +129,15 @@ void display_edge_classification(graph *G, int *previsit , int *postvisit, int *
 					}
 					
 					// if idx is -1 : (u --> v) is a tree edge
-					if(idx==-1) printf("(%3d --> %3d) : TREE EDGE\n" , u , v);
-					else printf("(%3d --> %3d) : FORWARD EDGE\n" , u , v);
+					if(idx==-1) printf("(%d [%d,%d] --> %d [%d,%d] ) : TREE EDGE\n" , u , previsit[u], postvisit[u], v , previsit[v] , postvisit[v]);
+					else printf("(%d [%d,%d] --> %d [%d,%d]) : FORWARD EDGE\n" , u , previsit[u], postvisit[u], v , previsit[v] , postvisit[v]);
 				
 				} else if(previsit[v] <= previsit[u] && postvisit[u] <= postvisit[v]) {
 					// case of back edge
-					printf("(%3d --> %3d) : BACK EDGE\n" , u , v);
+					printf("(%d [%d,%d] --> %d [%d,%d] ) : BACK EDGE\n" , u , previsit[u], postvisit[u], v , previsit[v] , postvisit[v]);
 				} else if(postvisit[v] <= previsit[u]) {
 					// case of cross edge
-					printf("(%3d --> %3d) : CROSS EDGE\n" , u , v);
+					printf("(%d [%d,%d] --> %d [%d,%d] ) : CROSS EDGE\n" , u , previsit[u], postvisit[u], v , previsit[v] , postvisit[v]);
 				}
 			}
 			itr_nd = itr_nd->next;
@@ -161,9 +162,10 @@ int main() {
 		display_adj_list(&G);			// display adjacency list of the graph
 		
 		printf("\n");
-		printf("DFS-iterative: ");		
-		DFS_iterative(&G , 0);			// Depth-first-search using stack based implementation
-		printf("\n");
+		//printf("DFS-iterative: ");		
+		//DFS_iterative(&G , 0);			// Depth-first-search using stack based implementation
+		//printf("\n");
+		
 		
         printf("DFS-Recursive: ");
         int *discovered = (int *)malloc(sizeof(int)*G.total_vertex);
@@ -176,7 +178,11 @@ int main() {
 			traversal[i] = postvisit[i] = previsit[i] = discovered[i] = NOT_DISCOVERED;
 		}
 		
-		DFS_recursive(&G , 0 , discovered, previsit , postvisit , &clock, traversal , &idx);
+		// input format instructions has not specified whether it will provide start_vertex or not
+		// therefore assuming start_vertex to be 0
+		int start_vertex =  0;
+		//scanf(" %d" , &start_vertex);
+		DFS_recursive(&G , start_vertex , discovered, previsit , postvisit , &clock, traversal , &idx);
 		printf("\n");
 		printf("\n");
 		/*classification of all the edges can be done using the information in previsit and postvist */
