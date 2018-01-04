@@ -1,3 +1,11 @@
+/********************************************************/
+/*	Name 		:	Kaushal Kishore						*/
+/*	RollNo		:	111601008							*/
+/*	FileName	:	stack.h								*/
+/********************************************************/
+
+/* Use Makefile to compile the program. */
+
 #include<stdio.h>
 #include<stdlib.h>
 #include "list.h"

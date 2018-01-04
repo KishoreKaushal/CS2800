@@ -1,3 +1,13 @@
+/********************************************************/
+/*	Name 		:	Kaushal Kishore						*/
+/*	RollNo		:	111601008							*/
+/*	FileName	:	main.c 								*/
+/*	Objective	:	Classification of the edges in 		*/
+/*					a DFS-tree traversal 				*/
+/********************************************************/
+
+/* Use Makefile to compile the program. */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "list.h"
@@ -7,6 +17,8 @@
 #define NOT_DISCOVERED 	(0)
 #define DISCOVERED 		(1)
 
+
+/* accepts adjacency list of a graph as input */
 void input_adjacency_list(graph *G) {
     int n; int *ptr;
     // for each vertex
@@ -27,10 +39,12 @@ void DFS_recursive(graph *G , int V , int *discovered , int *previsit , int *pos
     
 	int W;
 	printf("%d ", V);
+	// insert the V in the tree-traversal path
 	traversal[*idx] = V;
 	(*idx)++;
 	previsit[V] = *clock;
 	(*clock)++;
+	
 	discovered[V] = DISCOVERED;
     node *nd = G->adj_list[V].front;
     while(nd!=NULL) {
@@ -40,7 +54,6 @@ void DFS_recursive(graph *G , int V , int *discovered , int *previsit , int *pos
         }
         nd = nd->next;
     }
-	//printf("%d ", V);
 	postvisit[V] = *clock;
 	(*clock)++;
 }
@@ -50,7 +63,6 @@ void DFS_iterative(graph *G , int V) {
     // V : starting vertex
     int *discovered = (int *)malloc(sizeof(int)*G->total_vertex);
     for(int i=0; i<G->total_vertex; i++) discovered[i] = NOT_DISCOVERED;
-    
     int W;
     stack stk;
     initialize_stack(&stk);
@@ -58,7 +70,6 @@ void DFS_iterative(graph *G , int V) {
     
     while(!stack_empty(&stk)) {
         V = pop_int(&stk);
-        //printf("V: %d\n" , V);
         if(discovered[V] == NOT_DISCOVERED) {
             discovered[V] = DISCOVERED;
             printf("%d " , V);
@@ -148,9 +159,10 @@ int main() {
         initialize_graph(&G , V);		// initializing the graph
         input_adjacency_list(&G);		// input adjacency list
 		display_adj_list(&G);			// display adjacency list of the graph
+		
+		printf("\n");
 		printf("DFS-iterative: ");		
 		DFS_iterative(&G , 0);			// Depth-first-search using stack based implementation
-		printf("\n");
 		printf("\n");
 		
         printf("DFS-Recursive: ");

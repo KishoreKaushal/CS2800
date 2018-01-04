@@ -1,3 +1,11 @@
+/********************************************************/
+/*	Name 		:	Kaushal Kishore						*/
+/*	RollNo		:	111601008							*/
+/*	FileName	:	list.h								*/
+/********************************************************/
+
+/* Use Makefile to compile the program. */
+
 #include<stdio.h>
 #include<stdlib.h>
 
