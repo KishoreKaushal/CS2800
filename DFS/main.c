@@ -96,14 +96,14 @@ void display_adj_list(graph *G) {
 void display_edge_classification(graph *G, int *previsit , int *postvisit, int *traversal) {
 	node *itr_nd;
 	int u, v;
-	printf("Format : (u [u.start_time,u.end_time] --> v [v.start_time,v.end_time]) : EDGE_TYPE\n\n");
+	printf("Note: Classification is possible only for edges of which corresponding nodes are visited during DFS.\n\nOutput Format : \n(u [u.start_time,u.end_time] --> v [v.start_time,v.end_time]) : EDGE_TYPE\n\n");
 	// iterate through all the edges using the adjacency list
 	// directed edge from u to v is represented as : (u , v) or (u --> v)
 	for(u=0; u<G->total_vertex; u++) {
 		itr_nd = G->adj_list[u].front;
 		while(itr_nd!=NULL) {
 			v = *(int*)(itr_nd->data);
-			if(previsit[u]!=-1 && previsit[v]!=-1) {
+			if(previsit[u]!=0 || previsit[v]!=0) {
 				if(previsit[u] <= previsit[v] && postvisit[v]<= postvisit[u] ) {
 					// case of Tree/Forward edge
 					int idx=-1;
