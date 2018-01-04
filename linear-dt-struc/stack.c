@@ -32,4 +32,5 @@ node *get_top_node(stack *stk){
 	if(!stack_empty(stk)){
 		return stk->front;
 	}
+	return NULL;
 }
