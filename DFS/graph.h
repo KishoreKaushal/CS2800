@@ -5,9 +5,6 @@
 #ifndef GRAPH_H
 #define GRAPH_H
 
-void display_int(int *ptr);
-int compare_int(int *a , int *b);
-
 typedef struct graph {
     int total_vertex;
     list *adj_list;

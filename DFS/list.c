@@ -2,6 +2,10 @@
 #include<stdlib.h>
 #include "list.h"
 
+
+void display_int(int *ptr) { printf("%d " , *ptr); }
+int compare_int(int *a , int *b) { return (*a!=*b); }
+
 void pop_front(list* lst) {
     remove_node(lst, lst->front);
 }
@@ -106,4 +110,8 @@ void display_list(const list *lst , DISPLAY display){
 
 int contains(const list* lst, COMPARE compare, void *data) {
 	return (get_node(lst , compare , data)!=NULL);
+}
+
+int contains_int(const list* lst, int data) {
+	return contains(lst ,(COMPARE)compare_int , &data);
 }
