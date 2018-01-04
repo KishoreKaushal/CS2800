@@ -9,12 +9,12 @@ void initialize_queue(queue *q) {
 }
 
 /* Enqueue a data in the queue */
-int enqueue(queue *q, void *data) {
+void enqueue(queue *q, void *data) {
     push_back(q , data);        
 }
 
 /* Dequeue a data from the queue */
-int dequeue(queue *q) {
+void dequeue(queue *q) {
     pop_front(q);
 }
 

@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include "list.h"
+#include "stack.h"
 
 /* Initializes the stack */
 void initialize_stack(stack *stk) {
@@ -8,12 +9,12 @@ void initialize_stack(stack *stk) {
 }
 
 /* Pushes the data in the top of the stack */
-int push(stack *stk , void *data){
+void push(stack *stk , void *data){
 	push_front(stk , data);	
 }
 
 /* Pop the top data out of the stack */
-int pop(stack *stk){
+void pop(stack *stk){
 	pop_front(stk);
 }
 

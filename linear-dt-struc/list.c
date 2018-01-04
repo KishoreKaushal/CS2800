@@ -47,25 +47,30 @@ int push_back(list* lst, void* data){
 }
 
 void remove_node(list *lst, node *nd) {
-    void *data = nd->data;
-    if (nd == lst->front) {
-        if (lst->front->next == NULL) {
-            lst->front = lst->back = NULL;
+    if(nd!=NULL){
+        void *data = nd->data;
+        if (nd == lst->front) {
+            if (lst->front->next == NULL) {
+                lst->front = lst->back = NULL;
+            } else {
+                lst->front = lst->front->next;
+            }
         } else {
-            lst->front = lst->front->next;
+            node *tmp = lst->front;
+            while (tmp != NULL && tmp->next != nd) {
+                tmp = tmp->next;
+            }
+            if (tmp != NULL) {
+                tmp->next = nd->next;
+            }
+            if(nd == lst->back) {
+                lst->back = tmp;
+            }
         }
-    } else {
-        node *tmp = lst->front;
-        while (tmp != NULL && tmp->next != nd) {
-            tmp = tmp->next;
-        }
-        if (tmp != NULL) {
-            tmp->next = nd->next;
-        }
+        lst->size--;
+        free(nd);
+        free(data);       
     }
-    lst->size--;
-    free(nd);
-    free(data);
 }
 
 int list_empty(const list *lst) {
@@ -96,6 +101,7 @@ void display_list(const list *lst , DISPLAY display){
         display(current->data);
         current = current->next;
     }
+    printf("\n");
 }
 
 int contains(const list* lst, COMPARE compare, void *data) {
