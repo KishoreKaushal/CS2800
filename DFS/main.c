@@ -21,7 +21,27 @@ void input_adjacency_list(graph *G) {
     }
 }
 
+procedure DFS(G,v):
+2      label v as discovered
+3      for all edges from v to w in G.adjacentEdges(v) do
+4          if vertex w is not labeled as discovered then
+5              recursively call DFS(G,w)
 
+/*  recursive implementation of the DFS */
+void DFS_recursive(graph *G , int V , int *discovered) {
+    discovered[V] = DISCOVERED;
+    
+    node *nd = G->adj_list[V].front;
+    while(nd!=NULL) {
+        W = *(int*)(nd->data);
+        if(discovered[W]==NOT_DISCOVERED) {
+            DFS_recursive(G , W , discovered);
+        }
+        nd = nd->next;
+    }
+}
+
+/* iterative stack implementation of the DFS */
 void DFS_iterative(graph *G , int V) {
     // V : starting vertex
     int *discovered = (int *)malloc(sizeof(int)*G->total_vertex);
@@ -47,6 +67,8 @@ void DFS_iterative(graph *G , int V) {
             }
         }
     }
+    clear_stack(&stk);
+    free(discovered);
 }
 
 void display_adj_list(graph *G) {
@@ -64,17 +86,22 @@ int main() {
     
     if(freopen(filename,"r",stdin)) {   // redirecting input of the file to the
 										// standard input for the convenience
-    
+        
 	    int V;							// total vertex
         graph G;						// graph declatration	
         
         scanf(" %d" , &V);				// input the total vertex present
         initialize_graph(&G , V);		// initializing the graph
-        input_adjacency_list(&G);			// input adjacency list
+        input_adjacency_list(&G);		// input adjacency list
 		display_adj_list(&G);
 		DFS_iterative(&G , 0);
-		
-        clear_graph(&G);        	// free the memory allocated to the graph
+        
+        int *discovered = (int *)malloc(sizeof(int)*G.total_vertex);
+        for(int i=0; i<G.total_vertex; i++) discovered[i] = NOT_DISCOVERED;
+		DFS_recursive(&G , 0 , discovered);
+        
+        clear_graph(&G);        	    // free the memory allocated to the graph
+        free(discovered);
         fclose(stdin);
     }
     return 0;
