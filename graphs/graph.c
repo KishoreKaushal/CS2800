@@ -3,9 +3,6 @@
 #include "list.h"
 #include "graph.h"
 
-void display_int(int *ptr) { printf("%d " , *ptr); }
-int compare_int(int *a , int *b) { return (*a!=*b); }
-
 void initialize_graph(graph *G , int V) {
     G->total_vertex = V;
     G->adj_list = (list*)malloc(sizeof(list)*V);

@@ -167,10 +167,8 @@ int main() {
 		DFS_recursive(&G , 0 , discovered, previsit , postvisit , &clock, traversal , &idx);
 		printf("\n");
 		printf("\n");
-		display_edge_classification(&G, previsit , postvisit, traversal);
-        
-        
 		/*classification of all the edges can be done using the information in previsit and postvist */
+		display_edge_classification(&G, previsit , postvisit, traversal);
 		
 		/* free the memory allocated to the graph and arrays */
 		clear_graph(&G);

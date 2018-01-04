@@ -2,6 +2,10 @@
 #include<stdlib.h>
 #include "list.h"
 
+
+void display_int(int *ptr) { printf("%d " , *ptr); }
+int compare_int(int *a , int *b) { return (*a!=*b); }
+
 void pop_front(list* lst) {
     remove_node(lst, lst->front);
 }
@@ -16,9 +20,9 @@ void initialize_list(list *lst){
     lst->size = 0;
 }
 
-int push_front(list* lst, void* data){
+void push_front(list* lst, void* data){
     node *nd = (node*)malloc(sizeof(node));
-    if(nd == NULL) return 0;
+    if(nd == NULL) return ;
     nd->data = data;
     if(lst->front == NULL){
         lst->back = nd;
@@ -28,12 +32,11 @@ int push_front(list* lst, void* data){
     }
     lst->front = nd;
     lst->size++;
-    return 1;
 }
 
-int push_back(list* lst, void* data){
+void push_back(list* lst, void* data){
     node *nd = (node*)malloc(sizeof(node));
-    if(nd == NULL) return 0;
+    if(nd == NULL) return ;
     nd->data = data;
     nd->next = NULL;
     if(lst->front == NULL ){
@@ -43,7 +46,6 @@ int push_back(list* lst, void* data){
     }
     lst->back = nd;
     lst->size++;
-    return 1;
 }
 
 void remove_node(list *lst, node *nd) {
@@ -69,7 +71,7 @@ void remove_node(list *lst, node *nd) {
         }
         lst->size--;
         free(nd);
-        free(data);       
+        free(data);
     }
 }
 
@@ -106,4 +108,32 @@ void display_list(const list *lst , DISPLAY display){
 
 int contains(const list* lst, COMPARE compare, void *data) {
 	return (get_node(lst , compare , data)!=NULL);
+}
+
+int contains_int(const list* lst, int data) {
+	return contains(lst ,(COMPARE)compare_int , &data);
+}
+
+int pop_front_int(list *lst){
+    int data = (*(int*)(lst->front->data));
+    pop_front(lst);
+    return data;
+}
+
+int pop_back_int(list *lst){
+    int data = (*(int*)(lst->back->data));
+    pop_back(lst);
+    return data;
+}
+
+void push_front_int(list *lst, int data){
+    int *ptr = (int*)malloc(sizeof(int));
+    *ptr = data;
+    push_front(lst , ptr);
+}
+
+void push_back_int(list *lst, int data){
+    int *ptr = (int *)malloc(sizeof(int ));
+    *ptr = data;
+    push_back(lst, ptr);
 }

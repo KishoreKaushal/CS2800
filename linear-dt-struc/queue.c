@@ -10,12 +10,26 @@ void initialize_queue(queue *q) {
 
 /* Enqueue a data in the queue */
 void enqueue(queue *q, void *data) {
-    push_back(q , data);        
+    push_back(q , data);
+}
+
+/* enqueue an integer data into the stack */
+void enqueue_int(queue *q , int data) {
+	int *ptr = (int*)malloc(sizeof(int));
+	*ptr = data;
+	enqueue(q , ptr);
 }
 
 /* Dequeue a data from the queue */
 void dequeue(queue *q) {
     pop_front(q);
+}
+
+/* Returns and Dequeue an integer */
+int dequeue_int(queue *q) {
+    int data = *(int*)(q->front->data);
+    dequeue(q);
+    return data;
 }
 
 /* Get front node of the queue */
@@ -37,4 +51,3 @@ int queue_empty(queue *q){
 void clear_queue(queue *q) {
     clear_list(q);
 }
-

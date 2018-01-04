@@ -11,3 +11,5 @@ node* get_front(queue *q);			/* Get front node of the queue */
 node* get_back(queue *q);			/* Get the back node of the queue */
 int queue_empty(queue *q);			/* Returns 1 if the queue is empty */
 void clear_queue(queue *q);			/* Free the memory allocated to the queue */
+void enqueue_int(queue *q , int data);
+int dequeue_int(queue *q);
