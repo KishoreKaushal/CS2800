@@ -17,7 +17,6 @@
 #define NOT_DISCOVERED 	(0)
 #define DISCOVERED 		(1)
 
-
 /* accepts adjacency list of a graph as input */
 void input_adjacency_list(graph *G , FILE *fp) {
     if(fp){
@@ -154,24 +153,16 @@ int main() {
     scanf("%48[^\n]s" , filename);		// input file
 
     FILE *fp = fopen(filename, "r");
-    // if(freopen(filename,"r",stdin)) {   // redirecting input of the file to the
-										// standard input for the convenience
 
     if(fp) {
 	    int V;							// total vertex
         graph G;						// graph declatration
 
         fscanf(fp, " %d" , &V);				// input the total vertex present
-
         initialize_graph(&G , V);		// initializing the graph
         input_adjacency_list(&G , fp);		// input adjacency list
 		display_adj_list(&G);			// display adjacency list of the graph
-
-		printf("\n");
-		//printf("DFS-iterative: ");
-		//DFS_iterative(&G , 0);			// Depth-first-search using stack based implementation
-		//printf("\n");
-
+        printf("\n");
 
         int *discovered = (int *)malloc(sizeof(int)*G.total_vertex);
 		int *previsit = (int *)malloc(sizeof(int)*G.total_vertex);
@@ -183,19 +174,17 @@ int main() {
 			traversal[i] = postvisit[i] = previsit[i] = discovered[i] = NOT_DISCOVERED;
 		}
 
-		// input format instructions has not specified whether it will provide start_vertex or not
-		// therefore assuming start_vertex to be 0
 		int start_vertex =  0;
 
-        // freopen("/dev/tty" , "r", stdin);
         printf("Starting Node: ");
         scanf(" %d" , &start_vertex);
-        /* close the link of the file stream to the stdin */
+
         printf("DFS-Recursive: ");
 		DFS_recursive(&G , start_vertex , discovered, previsit , postvisit , &clock, traversal , &idx);
 		printf("\n");
 		printf("\n");
-		/*classification of all the edges can be done using the information in previsit and postvist */
+
+        /*classification of all the edges can be done using the information in previsit and postvist */
 		display_edge_classification(&G, previsit , postvisit, traversal);
 
 		/* free the memory allocated to the graph and arrays */
@@ -204,8 +193,8 @@ int main() {
 		free(previsit);
 		free(postvisit);
 		free(traversal);
+
         fclose(fp);
-        // fclose(stdin);
     }
     return 0;
 }
