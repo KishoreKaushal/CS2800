@@ -19,17 +19,20 @@
 
 
 /* accepts adjacency list of a graph as input */
-void input_adjacency_list(graph *G) {
-    int n; int *ptr;
-    // for each vertex
-    for(int i=0; i<G->total_vertex ; i++) {
-		// each adjacent list of a vertex is ended by a '-1'
-		while(scanf(" %d" , &n) , n!=-1) {
-			// printf("%d " , n);
-			ptr = (int *)malloc(sizeof(int));
-			*ptr = n;
-			push_back(&G->adj_list[i] , ptr);	// push the neighbour in the adjacency list of that vertex
-		}
+void input_adjacency_list(graph *G , FILE *fp) {
+    if(fp){
+        int n; int *ptr;
+        // for each vertex
+        for(int i=0; i<G->total_vertex ; i++) {
+
+    		// each adjacent list of a vertex is ended by a '-1'
+    		while(fscanf(fp, " %d" , &n) , n!=-1) {
+    			// printf("%d " , n);
+    			ptr = (int *)malloc(sizeof(int));
+    			*ptr = n;
+    			push_back(&G->adj_list[i] , ptr);	// push the neighbour in the adjacency list of that vertex
+    		}
+        }
     }
 }
 
@@ -150,16 +153,18 @@ int main() {
     printf("Taking input from the file: ");
     scanf("%48[^\n]s" , filename);		// input file
 
-    if(freopen(filename,"r",stdin)) {   // redirecting input of the file to the
+    FILE *fp = fopen(filename, "r");
+    // if(freopen(filename,"r",stdin)) {   // redirecting input of the file to the
 										// standard input for the convenience
 
+    if(fp) {
 	    int V;							// total vertex
         graph G;						// graph declatration
 
-        scanf(" %d" , &V);				// input the total vertex present
+        fscanf(fp, " %d" , &V);				// input the total vertex present
 
         initialize_graph(&G , V);		// initializing the graph
-        input_adjacency_list(&G);		// input adjacency list
+        input_adjacency_list(&G , fp);		// input adjacency list
 		display_adj_list(&G);			// display adjacency list of the graph
 
 		printf("\n");
@@ -168,7 +173,6 @@ int main() {
 		//printf("\n");
 
 
-        printf("DFS-Recursive: ");
         int *discovered = (int *)malloc(sizeof(int)*G.total_vertex);
 		int *previsit = (int *)malloc(sizeof(int)*G.total_vertex);
 		int *postvisit = (int *)malloc(sizeof(int)*G.total_vertex);
@@ -187,7 +191,7 @@ int main() {
         printf("Starting Node: ");
         scanf(" %d" , &start_vertex);
         /* close the link of the file stream to the stdin */
-
+        printf("DFS-Recursive: ");
 		DFS_recursive(&G , start_vertex , discovered, previsit , postvisit , &clock, traversal , &idx);
 		printf("\n");
 		printf("\n");
@@ -200,8 +204,8 @@ int main() {
 		free(previsit);
 		free(postvisit);
 		free(traversal);
-
-        fclose(stdin);
+        fclose(fp);
+        // fclose(stdin);
     }
     return 0;
 }
