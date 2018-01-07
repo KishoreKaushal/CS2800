@@ -116,7 +116,8 @@ void display_edge_classification(graph *G, int *previsit , int *postvisit, int *
 						}
 					}
 
-					for (int i=idx-1 ; i>=0; i++) {
+					for (int i=idx-1 ; i>=0; i--) {
+                        //printf("%d %d\n", __LINE__ , traversal[i]);
 						if(contains_int(&G->adj_list[traversal[i]] , v)) {
 							// first traversal[i] having an edge to v :
 							// then this is the parent vertex of v in the DFS tree
