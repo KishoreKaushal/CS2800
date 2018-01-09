@@ -95,34 +95,49 @@ int main() {
     printf("Input File Name to Sort: ");
     scanf("%[^\n]s" , filename);
     FILE *fptr1 , *fptr2 , *fptr3;
-    FILE *input_file = fopen(filename , "rwb");
-    FILE *output_file = fopen("sorted.dat" , "rwb");
+    FILE* I_O_FILE[2];
     
-    if(inputFile) {
-        int sorted_size1 = 1 , sorted_size2 = 1;
-        int a , b , itr=0;
-        rewind(input_file);
-        
-        // at the beginning of each prime iteration all the file pointer will be at 0
-        while() {
-        
+    I_O_FILE[0] = fopen(filename , "rwb");
+    I_O_FILE[1] = fopen("sorted.dat" , "rwb");
     
-            fptr2 = fptr1 = input_file;
-            itr = 0;
+    long long int cycle=0;
+    
+    
+    while(1)    
+        if(inputFile) {
             
             
-            // seek at the current position 
+            int input_file_idx = (cycle%2);
+            int output_file_idx = (cycle+1)%2;
+            
+            FILE *input_file = I_O_FILE[input_file_idx];
+            FILE *output_file = I_O_FILE[output_file_idx];
+                
+            // declare sorted size part
+            int sorted_size1 = 1 , sorted_size2 = 1;
+            int a , b , itr=0;
+            rewind(input_file);
+            
+            // at the beginning of each prime iteration all the file pointer will be at 0
             while() {
-                fseek(fptr1 , itr)
-                itr++;
-            }
             
-            // if fseek is possible for the fptr1 : file has not reached at end
-            if(fseek(fptr1 , sorted_size1*sizeof(long long int) , SEEK_CUR))
-            // move fptr2 to the beginning of the next part
-            fseek(fptr2 , sorted_size2*sizeof(long long int) , SEEK_CUR))
-        }    
-    }
+            
+                fptr2 = fptr1 = input_file;
+                itr = 0;
+                
+                
+                // seek at the current position 
+                while() {
+                    fseek(fptr1 , itr)
+                    itr++;
+                }
+                
+                // if fseek is possible for the fptr1 : file has not reached at end
+                if(fseek(fptr1 , sorted_size1*sizeof(long long int) , SEEK_CUR))
+                // move fptr2 to the beginning of the next part
+                fseek(fptr2 , sorted_size2*sizeof(long long int) , SEEK_CUR))
+            }    
+        }
     
     fclose(input_file);    
     return 0;
