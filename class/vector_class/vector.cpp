@@ -43,6 +43,14 @@ public:
             this.current = itr.current;
         }
 
+        bool operator== (const iterator &itr) {
+            return (current == itr.current);
+        }
+
+        bool operator!= (const iterator &itr) {
+            return (current != itr.current);
+        }
+
         T& operator*() { return current->val; }
     };
 
@@ -192,16 +200,14 @@ public:
     // }
 
     /* Returns a pointer to the starting node */
-    vector_node<T>* begin() {
-        return FRONT;
+    iterator begin() {
+        return iterator(FRONT);
     }
 
     /* Returns a pointer to the ending node */
-    vector_node<T>* end() {
-        return nullptr;
+    iterator end() {
+        return iterator(nullptr);
     }
-
-
 
     T& at(int index) {
         if(0 <= index && index < SIZE) {
@@ -253,8 +259,8 @@ public:
 
 ostream& operator<<(std::ostream& ostr, Vector<int>& list)
 {
-    for(vector_node<int>* nd = list.begin(); nd!=list.end(); nd = nd->next) {
-        ostr<<nd->val<<" ";
+    for(Vector<int>::iterator itr = list.begin(); itr!=list.end(); ++itr) {
+        ostr<<*itr<<" ";
     }
     return ostr;
 }
