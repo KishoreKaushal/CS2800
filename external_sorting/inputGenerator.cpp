@@ -4,7 +4,7 @@
 #include<cstdio>
 #include<ctime>
 
-#define MAX_VAL (5000)
+#define MAX_VAL (500000)
 // #define TOTAL_NUM (10)
 
 using namespace std;
@@ -19,7 +19,7 @@ int main() {
 
     if(fptr1 && fptr2) {
         srand(time(NULL));                  // seed for the random number
-        int TOTAL_NUM = rand()%1000;
+        int TOTAL_NUM = rand()%100000 + 50000;
         for(int i=0; i<TOTAL_NUM; i++) {
             num = rand()%MAX_VAL;
             cout<<num<<endl;

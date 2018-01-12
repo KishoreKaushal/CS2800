@@ -10,12 +10,12 @@
 using namespace std;
 
 int main() {
-    //char inFname[] = "input.bin";
+    char inFname[] = "input.bin";
     //    char readFname[] = "readable.input";
-    char inFname[50];
+//    char inFname[50];
     int num;
-    cout<<"Input File: ";
-    cin>>inFname;
+    //cout<<"Input File: ";
+    //cin>>inFname;
     FILE *fptr1 = fopen(inFname , "r");
     //FILE *fptr2 = fopen(readFname , "r");
 
