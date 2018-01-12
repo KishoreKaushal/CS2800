@@ -126,7 +126,8 @@ int main() {
 
         curr_size = (curr_size<<1) + (curr_size==0); // current size of the sub-array
         fptr_right = fptr_left = fptr_in;   // initializing
-
+        cout<<"At line: "<<__LINE__<<endl;
+        cout<<"Pos of fptr_left: "<<ftell(fptr_left)<<" Pos of fptr_right: "<<ftell(fptr_right)<<endl;
         if(0 != fseek(fptr_right , curr_size * sizeof(int), SEEK_CUR)) {
             // already sorted : record the outfile name
             strcpy(sorted_fname , file_name[in_idx]);
@@ -135,8 +136,8 @@ int main() {
             fclose(fptr_out);
             break;
         }
-
-
+        cout<<"At line: "<<__LINE__<<endl;
+        cout<<"Pos of fptr_left: "<<ftell(fptr_left)<<" Pos of fptr_right: "<<ftell(fptr_right)<<endl;
         int sub_div_count=0;
         bool merge_cycle = true;
 
@@ -162,10 +163,16 @@ int main() {
             // merging of the file start here
             cout<<"At line: "<<__LINE__<<endl;
             int r_count = curr_size ,  l_count = curr_size;
+            fread(&l_num , sizeof(int) , 1 , fptr_left);
+            fread(&r_num , sizeof(int) , 1, fptr_right);
+            cout<<"At line: "<<__LINE__<<endl;
+            cout<<"Pos of fptr_left: "<<ftell(fptr_left)<<" Pos of fptr_right: "<<ftell(fptr_right)<<endl;
+            cout<<"L_NUM: "<<l_num<<" R_NUM: "<<r_num<<endl;
+
             while(r_count>0 && l_count>0
                 && fread(&l_num , sizeof(int) , 1 , fptr_left)
                 && fread(&r_num , sizeof(int) , 1, fptr_right)) {
-
+                cout<<"L_NUM: "<<l_num<<" R_NUM: "<<r_num<<endl;
                 if(l_num <= r_num) {
                     cout<<"At line: "<<__LINE__<<endl;
                     // writing the l_num to the file
