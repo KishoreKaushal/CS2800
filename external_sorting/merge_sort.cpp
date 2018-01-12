@@ -113,6 +113,7 @@ int main() {
         fclose(fptr_out);
     }
 
+    remove("temp.bin");
     /* Converting to human readable format */
 
     FILE *fptr_in = fopen(sorted_fname , "rb");
