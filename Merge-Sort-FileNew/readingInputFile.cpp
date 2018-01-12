@@ -10,14 +10,20 @@
 using namespace std;
 
 int main() {
-    char inFname[] = "input.bin";
-    char readFname[] = "readable.input";
+    //char inFname[] = "input.bin";
+    //    char readFname[] = "readable.input";
+    char inFname[50];
     int num;
-
+    cout<<"Input File: ";
+    cin>>inFname;
     FILE *fptr1 = fopen(inFname , "r");
-    FILE *fptr2 = fopen(readFname , "r");
+    //FILE *fptr2 = fopen(readFname , "r");
 
-    cout<<"FSEEK: "<< fseek ( fptr1 , 2*sizeof( int) , SEEK_SET )<<endl;
+    fseek(fptr1, 0, SEEK_END); // seek to end of file
+    unsigned int size = ftell(fptr1); // get current file pointer
+    fseek(fptr1, 0, SEEK_SET);
+    cout<<"Size of the file: " <<size<<endl;
+    // fseek ( fptr1 , 2*sizeof( int) , SEEK_SET );
     // fread(&num , sizeof( int) , 1 ,fptr1);
     // cout<<num<<endl;
     while(fread(&num, sizeof(int), 1, fptr1)){
@@ -35,6 +41,6 @@ int main() {
     //}
 
     fclose(fptr1);
-    fclose(fptr2);
+    //fclose(fptr2);
     return 0;
 }
