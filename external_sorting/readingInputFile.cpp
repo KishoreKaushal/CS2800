@@ -22,7 +22,8 @@ int main() {
     fseek(fptr1, 0, SEEK_END); // seek to end of file
     unsigned int size = ftell(fptr1); // get current file pointer
     fseek(fptr1, 0, SEEK_SET);
-    cout<<"Size of the file: " <<size<<endl;
+    cout<<"Size of the input.bin file: " <<size<<" bytes"<<endl;
+    cout<<"Number of Integers in the file: "<<size/sizeof(int)<<endl;
     // fseek ( fptr1 , 2*sizeof( int) , SEEK_SET );
     // fread(&num , sizeof( int) , 1 ,fptr1);
     // cout<<num<<endl;

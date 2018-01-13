@@ -20,6 +20,7 @@ int main() {
     if(fptr1 && fptr2) {
         srand(time(NULL));                  // seed for the random number
         int TOTAL_NUM = rand()%100000 + 50000;
+        TOTAL_NUM = 1000000;
         for(int i=0; i<TOTAL_NUM; i++) {
             num = rand()%MAX_VAL;
             cout<<num<<endl;

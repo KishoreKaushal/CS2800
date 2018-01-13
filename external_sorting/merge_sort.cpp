@@ -9,9 +9,10 @@ int main() {
     char file_name[2][50];
     char sorted_fname[50];
 
-    printf("Input File Name (Binary-Format) to Sort: ");
-    scanf("%[^\n]s" , file_name[0]);
-    cout<<endl;
+    cout<<"Input File Name (Binary-Format) to Sort: ";
+    //scanf("%[^\n]s" , file_name[0]);
+    strcpy(file_name[0] , "input.bin");
+    cout<<file_name[0]<<endl;
     cout<<"Output File Name: output.txt"<<endl;
     strcpy(file_name[1] , "temp.bin");
 
@@ -118,7 +119,7 @@ int main() {
 
     FILE *fptr_in = fopen(sorted_fname , "rb");
     FILE *sorted_data = fopen("output.txt" , "w");
-
+    
     while(fread(&num, sizeof(int), 1, fptr_in)){
        // cout<<num<<" ";
        fprintf(sorted_data, "%d\n", num);
