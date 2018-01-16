@@ -18,6 +18,17 @@ void input_adj_list(graph &G) {
     }
 }
 
+/*  recursive implementation of the DFS */
+void DFS_recursive(graph &G , int V , Vector<bool> &discovered ) {
+	int W;
+	discovered[V] = true;
+    for(auto itr = G.adj_list[V].begin() ; itr!=G.adj_list[V].end() ; ++itr) {
+        W = itr->node_num;
+        if(discovered[W] == false) {
+            DFS_recursive(G , W , discovered);
+        }
+    }
+}
 
 int main() {
     char filename[50];
