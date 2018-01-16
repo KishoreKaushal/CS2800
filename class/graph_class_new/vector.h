@@ -1,4 +1,5 @@
 #include<iostream>
+#include<cstdlib>
 
 using namespace std;
 
@@ -53,7 +54,6 @@ public:
 
         T& operator*() { return current->val; }
     };
-
 
     Vector() { FRONT = nullptr; BACK = nullptr ; SIZE=0; }
     // Vector(T arr[], int n) ;
@@ -273,79 +273,79 @@ ostream& operator<<(std::ostream& ostr, Vector<int>& list)
 
 #endif // VECTOR_H
 
-
-/* TEST-BENCH*/
-int main() {
-    Vector<int> v;
-
-    cout<<"Size : "<<v.size()<<endl;
-    if(!v.empty()) {cout<<v<<endl;} else {cout<<"EMPTY"<<endl;}
-    v.push_back(20);
-    cout<<"Size : "<<v.size()<<endl;
-    if(!v.empty()) {cout<<v<<endl;} else {cout<<"EMPTY"<<endl;}
-    v.push_back(40);
-    cout<<"Size : "<<v.size()<<endl;
-    if(!v.empty()) {cout<<v<<endl;} else {cout<<"EMPTY"<<endl;}
-    v.push_front(89);
-    cout<<"Size : "<<v.size()<<endl;
-    if(!v.empty()) {cout<<v<<endl;} else {cout<<"EMPTY"<<endl;}
-    v.push_front(70);
-    cout<<"Size : "<<v.size()<<endl;
-    if(!v.empty()) {cout<<v<<endl;} else {cout<<"EMPTY"<<endl;}
-    v.insert(55 , 2);
-    cout<<"Size : "<<v.size()<<endl;
-    if(!v.empty()) {cout<<v<<endl;} else {cout<<"EMPTY"<<endl;}
-
-    for(int i=0; i<5; i++) {
-        v.push_back(i*2);
-        v.push_front(-1*i);
-    }
-
-    cout<<"Size : "<<v.size()<<endl;
-    if(!v.empty()) {cout<<v<<endl;} else {cout<<"EMPTY"<<endl;}
-
-    cout<<"Front Val: "<<v.front()<<endl;
-    cout<<"Back Val: "<<v.back()<<endl;
-    cout<<"V[3] : "<<v[3]<<endl;
-    cout<<"V[5]: "<<v[5]<<endl;
-    cout<<"V[9]: "<<v[9]<<endl;
-    cout<<"V[0]: "<<v[0]<<endl;
-    cout<<"v.size(): "<<v.size()<<endl;
-    cout<<"V[v.size()-1]: "<<v[v.size()-1]<<endl;
-
-
-    v.pop_back();
-    cout<<"Size : "<<v.size()<<endl;
-    if(!v.empty()) {cout<<v<<endl;} else {cout<<"EMPTY"<<endl;}
-
-    v.pop_back();
-    cout<<"Size : "<<v.size()<<endl;
-    if(!v.empty()) {cout<<v<<endl;} else {cout<<"EMPTY"<<endl;}
-
-    v.pop_front();
-    cout<<"Size : "<<v.size()<<endl;
-    if(!v.empty()) {cout<<v<<endl;} else {cout<<"EMPTY"<<endl;}
-
-    v.pop_front();
-    cout<<"Size : "<<v.size()<<endl;
-    if(!v.empty()) {cout<<v<<endl;} else {cout<<"EMPTY"<<endl;}
-
-    cout<<"Erase : idx 2"<<endl;
-    v.erase(2);
-    if(!v.empty()) {cout<<v<<endl;} else {cout<<"EMPTY"<<endl;}
-
-    cout<<"Erase : idx 0"<<endl;
-    v.erase(0);
-    if(!v.empty()) {cout<<v<<endl;} else {cout<<"EMPTY"<<endl;}
-
-    cout<<"Erase : idx size-1"<<endl;
-    v.erase(v.size()-1);
-    if(!v.empty()) {cout<<v<<endl;} else {cout<<"EMPTY"<<endl;}
-
-    v.clear();
-    cout<<"Size : "<<v.size()<<endl;
-    if(!v.empty()) {cout<<v<<endl;} else {cout<<"EMPTY"<<endl;}
-
-
-    return 0;
-}
+//
+// /* TEST-BENCH*/
+// int main() {
+//     Vector<int> v;
+//
+//     cout<<"Size : "<<v.size()<<endl;
+//     if(!v.empty()) {cout<<v<<endl;} else {cout<<"EMPTY"<<endl;}
+//     v.push_back(20);
+//     cout<<"Size : "<<v.size()<<endl;
+//     if(!v.empty()) {cout<<v<<endl;} else {cout<<"EMPTY"<<endl;}
+//     v.push_back(40);
+//     cout<<"Size : "<<v.size()<<endl;
+//     if(!v.empty()) {cout<<v<<endl;} else {cout<<"EMPTY"<<endl;}
+//     v.push_front(89);
+//     cout<<"Size : "<<v.size()<<endl;
+//     if(!v.empty()) {cout<<v<<endl;} else {cout<<"EMPTY"<<endl;}
+//     v.push_front(70);
+//     cout<<"Size : "<<v.size()<<endl;
+//     if(!v.empty()) {cout<<v<<endl;} else {cout<<"EMPTY"<<endl;}
+//     v.insert(55 , 2);
+//     cout<<"Size : "<<v.size()<<endl;
+//     if(!v.empty()) {cout<<v<<endl;} else {cout<<"EMPTY"<<endl;}
+//
+//     for(int i=0; i<5; i++) {
+//         v.push_back(i*2);
+//         v.push_front(-1*i);
+//     }
+//
+//     cout<<"Size : "<<v.size()<<endl;
+//     if(!v.empty()) {cout<<v<<endl;} else {cout<<"EMPTY"<<endl;}
+//
+//     cout<<"Front Val: "<<v.front()<<endl;
+//     cout<<"Back Val: "<<v.back()<<endl;
+//     cout<<"V[3] : "<<v[3]<<endl;
+//     cout<<"V[5]: "<<v[5]<<endl;
+//     cout<<"V[9]: "<<v[9]<<endl;
+//     cout<<"V[0]: "<<v[0]<<endl;
+//     cout<<"v.size(): "<<v.size()<<endl;
+//     cout<<"V[v.size()-1]: "<<v[v.size()-1]<<endl;
+//
+//
+//     v.pop_back();
+//     cout<<"Size : "<<v.size()<<endl;
+//     if(!v.empty()) {cout<<v<<endl;} else {cout<<"EMPTY"<<endl;}
+//
+//     v.pop_back();
+//     cout<<"Size : "<<v.size()<<endl;
+//     if(!v.empty()) {cout<<v<<endl;} else {cout<<"EMPTY"<<endl;}
+//
+//     v.pop_front();
+//     cout<<"Size : "<<v.size()<<endl;
+//     if(!v.empty()) {cout<<v<<endl;} else {cout<<"EMPTY"<<endl;}
+//
+//     v.pop_front();
+//     cout<<"Size : "<<v.size()<<endl;
+//     if(!v.empty()) {cout<<v<<endl;} else {cout<<"EMPTY"<<endl;}
+//
+//     cout<<"Erase : idx 2"<<endl;
+//     v.erase(2);
+//     if(!v.empty()) {cout<<v<<endl;} else {cout<<"EMPTY"<<endl;}
+//
+//     cout<<"Erase : idx 0"<<endl;
+//     v.erase(0);
+//     if(!v.empty()) {cout<<v<<endl;} else {cout<<"EMPTY"<<endl;}
+//
+//     cout<<"Erase : idx size-1"<<endl;
+//     v.erase(v.size()-1);
+//     if(!v.empty()) {cout<<v<<endl;} else {cout<<"EMPTY"<<endl;}
+//
+//     v.clear();
+//     cout<<"Size : "<<v.size()<<endl;
+//     if(!v.empty()) {cout<<v<<endl;} else {cout<<"EMPTY"<<endl;}
+//
+//
+//     return 0;
+// }

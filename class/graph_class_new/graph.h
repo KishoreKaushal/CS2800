@@ -1,5 +1,5 @@
 #include<iostream>
-#include "list.h"
+// #include "list.h"
 #include "vector.h"
 
 using namespace std;
@@ -17,6 +17,15 @@ struct adj_list_node {
     }
 };
 
+ostream& operator<<(std::ostream& ostr, Vector<adj_list_node>& list)
+{
+    for(Vector<adj_list_node>::iterator itr = list.begin(); itr!=list.end(); ++itr) {
+        ostr<<(*itr).node_num<<" ";
+    }
+    return ostr;
+}
+
+
 bool compare_adj_list_node(adj_list_node* a , adj_list_node* b) {
     return (a->node_num!=b->node_num);
 }
@@ -28,7 +37,7 @@ void display_adj_list_node(adj_list_node* a) {
 class graph {
     int total_vertex;
     // list *adj_list;
-    Vector <Vector<adj_list_node>> adj_list;
+    Vector < Vector<adj_list_node> > adj_list;
 public:
     int get_total_vertex(){
         return total_vertex;
@@ -49,23 +58,23 @@ public:
     	// self directed edges are not allowed : i.e x != y
     	if(0<=x && x<total_vertex && 0<=y && y<total_vertex && x!=y){
             adj_list_node p(y);
-            // node *nd = get_node(&adj_list[x] , (COMPARE)compare_adj_list_node , &p);
             bool present = false;
+            int idx=0;
             for(Vector<adj_list_node>::iterator itr = adj_list[x].begin(); itr!=adj_list[x].end(); ++itr) {
                 if(*itr == p) {
                     present = true;
+                    adj_list[x].erase(idx);
+                    break;
                 }
+                idx++;
             }
-    		// if(nd!=NULL) remove_node(&adj_list[x], nd);
-            if(present) 
         }
     }
 
     /* adds the edge from the vertex x to the vertex y, if it is not there*/
     void add_edge(int x, int y, int w=1) {
         if(0<=x && x<total_vertex && 0<=y && y<total_vertex && x!=y && !adjacent(x , y)){
-            adj_list_node* ptr = new adj_list_node{y , w};
-            push_back(&adj_list[x] , ptr);
+            adj_list[x].push_back(adj_list_node(y,w));
         }
     }
 
@@ -73,7 +82,7 @@ public:
     void display_neighbors(int x) {
         // prints all the neighbours of the vertex 'x'
         if(0<=x && x<total_vertex){
-            display_list(&adj_list[x] , (DISPLAY)display_adj_list_node);
+            cout<<adj_list[x]<<endl;
         }
     }
 
@@ -81,7 +90,12 @@ public:
     bool adjacent(int x, int y) {
         if(0<=x && x<total_vertex && 0<=y && y<total_vertex && x!=y){
             adj_list_node tmp(y);
-            return (contains(&adj_list[x] , (COMPARE) compare_adj_list_node , &tmp)!=0);
+            for(Vector<adj_list_node>::iterator itr = adj_list[x].begin(); itr!=adj_list[x].end(); ++itr) {
+                if(*itr == tmp) {
+                    return true;
+                }
+            }
+            return false;
         }
         else return false;
     }
@@ -89,10 +103,10 @@ public:
     /* clear the memory allocated to the graph */
     void clear() {
         for(int i=0; i<total_vertex ; i++) {
-    		clear_list(&adj_list[i]);	       // clear the adjacent list
+    		adj_list[i].clear();      	       // clear the adjacent list
     	}
     	total_vertex = 0;                      // set the vertex count to zero
-    	delete [] adj_list;					   // free the adjacent list array
+    	adj_list.clear();					   // free the adjacent list array
     }
 
     void print(){

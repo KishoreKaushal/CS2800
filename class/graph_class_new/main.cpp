@@ -1,7 +1,7 @@
 #include<iostream>
 #include <stdio.h>
 #include <stdlib.h>
-#include "list.h"
+// #include "list.h"
 #include "graph.h"
 
 using namespace std;
