@@ -56,10 +56,7 @@ public:
     };
 
     Vector() { FRONT = nullptr; BACK = nullptr ; SIZE=0; }
-    // Vector(T arr[], int n) ;
-    // Vector(T data , int n) {
-    //
-    // }
+
     Vector(int n , T data) {
         SIZE = 0;
         FRONT = nullptr;
