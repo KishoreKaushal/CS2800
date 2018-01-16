@@ -19,15 +19,16 @@ void input_adj_list(graph &G) {
 }
 
 /*  recursive implementation of the DFS */
-void DFS_recursive(graph &G , int V , Vector<bool> &discovered ) {
+void DFS_recursive(graph &G , int V , Vector<bool> &discovered , Vector<int> &ts) {
 	int W;
 	discovered[V] = true;
     for(auto itr = G.adj_list[V].begin() ; itr!=G.adj_list[V].end() ; ++itr) {
-        W = itr->node_num;
+        W = (*itr).node_num;
         if(discovered[W] == false) {
-            DFS_recursive(G , W , discovered);
+            DFS_recursive(G , W , discovered , ts);
         }
     }
+    ts.push_front(V);    // topological sorting
 }
 
 int main() {
@@ -45,39 +46,51 @@ int main() {
 
         input_adj_list(G);			// input adjacency list
 
-		printf("is there edge from %d to %d : %d\n" ,1 ,2,  G.adjacent(1 , 2));
-		printf("is there edge from %d to %d : %d\n" ,0 ,2,  G.adjacent(0 , 2));
-		printf("is there edge from %d to %d : %d\n" ,2 ,4,  G.adjacent(2 , 4));
+		// printf("is there edge from %d to %d : %d\n" ,1 ,2,  G.adjacent(1 , 2));
+		// printf("is there edge from %d to %d : %d\n" ,0 ,2,  G.adjacent(0 , 2));
+		// printf("is there edge from %d to %d : %d\n" ,2 ,4,  G.adjacent(2 , 4));
+        //
+        // cout<<endl;
+        //
+		// if(!G.empty()) {
+		// 	printf("Adjacency List of the Input Graph: \n");
+		// 	G.print();		// prints the adjacent list of the graph
+		// 	cout<<endl;
+		// }
+        //
+		// int x=0 , y=0, s;
+        //
+		// while(s=scanf(" %d %d" , &x , &y) , (s!=EOF)&&(x||y)) {
+		// 	printf("Removing edge between the vertex %d and %d\n" , x , y);
+		// 	G.remove_edge(x , y);
+		// }
+        //
+        // cout<<endl;
+        //
+		// if(!G.empty()) {
+		// 	printf("Adjacency List of the Input Graph: \n");
+		// 	G.print();		// prints the adjacent list of the graph
+		// 	cout<<endl;
+		// }
+        //
+        // G.clear();      	// free the memory allocated to the graph
+		// if(!G.empty()) {
+		// 	printf("Adjacency List of the Input Graph: \n");
+		// 	G.print();		// prints the adjacent list of the graph
+		// 	cout<<endl;
+		// }
 
-        cout<<endl;
+        Vector <bool> discovered(V , false);
+        Vector <int> ts;    // topological sort
 
-		if(!G.empty()) {
-			printf("Adjacency List of the Input Graph: \n");
-			G.print();		// prints the adjacent list of the graph
-			cout<<endl;
-		}
+        // DFS : forest of trees
+        for(int i=0; i<V; ++i) {
+            if(!discovered[i]) {
+                DFS_recursive(G , i, discovered , ts);
+            }
+        }
 
-		int x=0 , y=0, s;
-
-		while(s=scanf(" %d %d" , &x , &y) , (s!=EOF)&&(x||y)) {
-			printf("Removing edge between the vertex %d and %d\n" , x , y);
-			G.remove_edge(x , y);
-		}
-
-        cout<<endl;
-
-		if(!G.empty()) {
-			printf("Adjacency List of the Input Graph: \n");
-			G.print();		// prints the adjacent list of the graph
-			cout<<endl;
-		}
-
-        G.clear();      	// free the memory allocated to the graph
-		if(!G.empty()) {
-			printf("Adjacency List of the Input Graph: \n");
-			G.print();		// prints the adjacent list of the graph
-			cout<<endl;
-		}
+        cout<<"Topological Sorting: "<<ts<<endl;
         fclose(stdin);
     }
     return 0;

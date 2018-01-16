@@ -56,16 +56,16 @@ public:
     };
 
     Vector() { FRONT = nullptr; BACK = nullptr ; SIZE=0; }
-    // Vector(T arr[], int n) ;
-    // Vector(T data , int n) {
-    //
-    // }
+
     Vector(int n , T data) {
+        SIZE = 0;
+        FRONT = nullptr;
+        BACK = nullptr ;
         for (int i=0; i<n; i++) {
             push_back(data);
         }
     }
-    ~Vector() { clear() ; }
+    ~Vector() {  clear() ; }
 
     /* Returns 1 if the vector is empty */
     bool empty() {
@@ -78,6 +78,7 @@ public:
             pop_front();
         }
     }
+
     /* Removes a node from the back */
     void pop_back() {
         if(SIZE!=0) {

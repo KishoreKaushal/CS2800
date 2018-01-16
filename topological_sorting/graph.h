@@ -35,10 +35,10 @@ void display_adj_list_node(adj_list_node* a) {
 }
 
 class graph {
+public:
     int total_vertex;
     // list *adj_list;
     Vector < Vector<adj_list_node> > adj_list;
-public:
     int get_total_vertex(){
         return total_vertex;
     }
