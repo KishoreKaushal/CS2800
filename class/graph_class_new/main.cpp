@@ -23,7 +23,7 @@ void DFS_recursive(graph &G , int V , Vector<bool> &discovered ) {
 	int W;
 	discovered[V] = true;
     for(auto itr = G.adj_list[V].begin() ; itr!=G.adj_list[V].end() ; ++itr) {
-        W = itr->node_num;
+        W = (*itr).node_num;
         if(discovered[W] == false) {
             DFS_recursive(G , W , discovered);
         }
