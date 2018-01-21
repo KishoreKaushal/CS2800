@@ -40,8 +40,34 @@ public:
             ++(*this);
             return result;
         }
+
+        const iterator& operator--() {
+            current = current->prev;
+            return *this;
+        }
+
+        iterator operator--(int) {
+            iterator result = *this;
+            --(*this);
+            return result;
+        }
+
+        void operator+(int n) {
+            for(int i=0; i<n; ++i){
+                if(current->next!=nullptr) current = current->next;
+                else break;
+            }
+        }
+
+        void operator-(int n) {
+            for(int i=0; i<n; ++i){
+                if(current->prev!= nullptr) current = current->prev;
+                else break;
+            }
+        }
+
         void operator=(const iterator &itr) {
-            this.current = itr.current;
+            this->current = itr.current;
         }
 
         bool operator== (const iterator &itr) {
@@ -213,6 +239,14 @@ public:
     /* Returns a pointer to the ending node */
     iterator end() {
         return iterator(nullptr);
+    }
+
+    iterator rend() {
+        return iterator(nullptr);
+    }
+
+    iterator rbegin() {
+        return iterator(BACK);
     }
 
     T& at(int index) {

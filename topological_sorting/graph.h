@@ -17,8 +17,7 @@ struct adj_list_node {
     }
 };
 
-ostream& operator<<(std::ostream& ostr, Vector<adj_list_node>& list)
-{
+ostream& operator<<(std::ostream& ostr, Vector<adj_list_node>& list) {
     for(Vector<adj_list_node>::iterator itr = list.begin(); itr!=list.end(); ++itr) {
         ostr<<(*itr).node_num<<" ";
     }
@@ -37,18 +36,22 @@ void display_adj_list_node(adj_list_node* a) {
 class graph {
 public:
     int total_vertex;
-    // list *adj_list;
+    int  *previsit;  // previsit timing : used in the DFS
+    int  *postvisit; // postvisit timing : will be used in the DFS
+    int clock;
+
     Vector < Vector<adj_list_node> > adj_list;
     int get_total_vertex(){
         return total_vertex;
     }
 
     /* initializes the graph */
-    // : adj_list(V , Vector<adj_list_node>(0 , adj_list_node(-1 , -1)))
-    graph(int V)  {
-        total_vertex=V;
+    graph(int V) :  total_vertex{V} , clock{0} {
+        previsit = new int[V]();
+        postvisit = new int[V]();
         for(int i=0; i<V; i++) {
             adj_list.push_back(Vector<adj_list_node>(0 , adj_list_node(-1 , -1)));
+            // previsit[i] = postvisit[i] = -1;
         }
     }
 
@@ -100,6 +103,13 @@ public:
         else return false;
     }
 
+    void reset_previsit_postvisit() {
+        for (int i=0; i<total_vertex; ++i) {
+            postvisit[i] = previsit[i] = 0;
+        }
+        clock = 0;
+    }
+
     /* clear the memory allocated to the graph */
     void clear() {
         for(int i=0; i<total_vertex ; i++) {
@@ -107,6 +117,8 @@ public:
     	}
     	total_vertex = 0;                      // set the vertex count to zero
     	adj_list.clear();					   // free the adjacent list array
+        delete [] previsit;
+        delete [] postvisit;
     }
 
     void print(){
@@ -120,6 +132,8 @@ public:
 
     ~graph() {
         if(total_vertex!=0) clear();
+        delete [] previsit;
+        delete [] postvisit;
     }
 };
 

@@ -1,0 +1,51 @@
+int display_edge_classification(graph &G, Vector<int> &traversal) {
+
+	int u, v;
+	// printf("Note: Classification is possible only for edges of which corresponding nodes are visited during DFS.\n\nOutput Format : \n(u [u.start_time,u.end_time] --> v [v.start_time,v.end_time]) : EDGE_TYPE\n\n");
+	// iterate through all the edges using the adjacency list
+	// directed edge from u to v is represented as : (u , v) or (u --> v)
+
+    for(int u=0; u<G.total_vertex; u++) {
+        for(Vector<adj_list_node>::iterator itr = G.adj_list[u].begin(); itr!=G.adj_list[u].end(); ++itr) {
+            v = (*itr).node_num;
+            if(G.previsit[u]!=0 || G.previsit[v]!= 0) {
+                if(G.previsit[u] <= G.previsit[v] && G.postvisit[v]<= G.postvisit[u] ) {
+                    // tree/forward edge
+                    int idx=-1;
+                    Vector<int>::iterator int_itr;
+                    for(int_itr = traversal.begin() ,int i=0; int_itr!=traversal.end() && i<G.total_vertex; ++i, ++int_itr) {
+                        if(*int_itr == v) {
+                            idx = i;
+                            break;
+                        }
+                    }
+                    --int_itr;
+					for (int i=idx-1 ; i>=0 && int_itr!=traversal.rend(); i-- , --int_itr) {
+                        //printf("%d %d\n", __LINE__ , traversal[i]);
+                        if(G.adjacent(*int_itr , v)) {
+						// if(contains_int(&G->adj_list[traversal[i]] , v)) {
+							// first traversal[i](=*itr) having an edge to v :
+							// then this is the parent vertex of v in the DFS tree
+							if(*int_itr==u) {
+								// u is the parent node of v in DFS tree
+								// which confirms that (u --> v) is a tree edge
+								// set idx = -1
+								idx = -1;
+							}
+							break;
+						}
+					}
+					// if idx is -1 : (u --> v) is a tree edge
+					if(idx==-1) return TREE_EDGE;
+					else return FORWARD_EDGE ;
+                } else if(G.previsit[v] <= G.previsit[u] && G.postvisit[u] <= G.postvisit[v]) {
+                    // back edge
+                    return BACK_EDGE;
+                } else if (G.postvisit[v] <= G.previsit[u]) {
+                    // cross edge
+                    return CROSS_EDGE;
+                }
+            }
+        }
+    }
+}
