@@ -169,11 +169,12 @@ int main() {
                 if(back_edge_present) {
                     cout<<"Graph contains a directed cycle: ";
                     int bktrace_vertex = *itr1;
+                    cout<<*itr2<<"<-";
                     do {
                         cout<<bktrace_vertex<<"<-";
                         bktrace_vertex = G.pi[bktrace_vertex];
-                    } while(bktrace_vertex!=-1);
-                    cout<<*itr1<<endl;
+                    } while(bktrace_vertex!=*itr2);
+                    cout<<*itr2<<endl;
                 }
                 traversal.clear();
             }
