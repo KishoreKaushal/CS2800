@@ -38,6 +38,7 @@ public:
     int total_vertex;
     int  *previsit;  // previsit timing : used in the DFS
     int  *postvisit; // postvisit timing : will be used in the DFS
+    int *pi;        // DFS caller
     int clock;
 
     Vector < Vector<adj_list_node> > adj_list;
@@ -49,6 +50,7 @@ public:
     graph(int V) :  total_vertex{V} , clock{0} {
         previsit = new int[V]();
         postvisit = new int[V]();
+        pi = new int[V]();
         for(int i=0; i<V; i++) {
             adj_list.push_back(Vector<adj_list_node>(0 , adj_list_node(-1 , -1)));
             // previsit[i] = postvisit[i] = -1;
@@ -106,6 +108,7 @@ public:
     void reset_previsit_postvisit() {
         for (int i=0; i<total_vertex; ++i) {
             postvisit[i] = previsit[i] = 0;
+            pi[i] = -1;
         }
         clock = 0;
     }
@@ -119,6 +122,7 @@ public:
     	adj_list.clear();					   // free the adjacent list array
         delete [] previsit;
         delete [] postvisit;
+        delete [] pi;
     }
 
     void print(){
@@ -132,8 +136,8 @@ public:
 
     ~graph() {
         if(total_vertex!=0) clear();
-        delete [] previsit;
-        delete [] postvisit;
+        // delete [] previsit;
+        // delete [] postvisit;
     }
 };
 

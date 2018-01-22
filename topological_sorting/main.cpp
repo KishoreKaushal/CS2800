@@ -33,6 +33,7 @@ void DFS_recursive(graph &G , int V , Vector<bool> &discovered , Vector<int> &ts
     for(auto itr = G.adj_list[V].begin() ; itr!=G.adj_list[V].end() ; ++itr) {
         W = (*itr).node_num;
         if(discovered[W] == false) {
+            G.pi[W] = V;
             DFS_recursive(G , W , discovered , ts, traversal);
         }
     }
@@ -142,8 +143,9 @@ int main() {
                 G.reset_previsit_postvisit();
                 cout<<"Root Node: "<<i<<endl;
                 DFS_recursive(G , i, discovered , ts , traversal);
-                for(auto itr1 = traversal.begin() ; itr1!=traversal.end() ; ++itr1) {
-                    for(auto itr2 = traversal.begin() ; itr2!=traversal.end(); ++itr2) {
+                Vector<int>::iterator itr1 , itr2;
+                for(itr1 = traversal.begin() ; itr1!=traversal.end() ; ++itr1) {
+                    for(itr2 = traversal.begin() ; itr2!=traversal.end(); ++itr2) {
                         if(G.adjacent(*itr1 , *itr2)) {
                             switch (classify_edge(G,traversal , *itr1, *itr2)) {
                                 case BACK_EDGE: cout<<"("<<*itr1<<"->"<<*itr2<<") : BACK_EDGE"<<endl;
@@ -159,18 +161,26 @@ int main() {
                                 break;
                             }
                         }
+                        if(back_edge_present) break;
                     }
+                    if(back_edge_present) break;
                 }
                 cout<<endl;
                 if(back_edge_present) {
-                    cout<<"Graph contains a directed cycle."<<endl;
-
+                    cout<<"Graph contains a directed cycle: ";
+                    int bktrace_vertex = *itr1;
+                    do {
+                        cout<<bktrace_vertex<<"<-";
+                        bktrace_vertex = G.pi[bktrace_vertex];
+                    } while(bktrace_vertex!=-1);
+                    cout<<*itr1<<endl;
                 }
                 traversal.clear();
             }
+            if(back_edge_present) break;
         }
 
-        cout<<"Topological Sorting: "<<ts<<endl;
+        if(!back_edge_present) cout<<"Topological Sorting: "<<ts<<endl;
         fclose(stdin);
     }
     return 0;
