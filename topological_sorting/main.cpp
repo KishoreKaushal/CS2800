@@ -1,8 +1,15 @@
+/********************************************************/
+/*	Name 		:	Kaushal Kishore						*/
+/*	RollNo		:	111601008							*/
+/*	FileName	:	main.cpp      						*/
+/*	Objective	:	Topological sorting           		*/
+/********************************************************/
+
 #include<iostream>
 #include <stdio.h>
 #include <stdlib.h>
-// #include "list.h"
-#include "graph.h"
+#include "graph.h"  // graph implementation
+#include "vector.h" // vector implementation
 
 #define TREE_EDGE       (0)
 #define FORWARD_EDGE    (1)
@@ -98,43 +105,10 @@ int main() {
 
         input_adj_list(G);			// input adjacency list
 
-		// printf("is there edge from %d to %d : %d\n" ,1 ,2,  G.adjacent(1 , 2));
-		// printf("is there edge from %d to %d : %d\n" ,0 ,2,  G.adjacent(0 , 2));
-		// printf("is there edge from %d to %d : %d\n" ,2 ,4,  G.adjacent(2 , 4));
-        //
-        // cout<<endl;
-        //
-		// if(!G.empty()) {
-		// 	printf("Adjacency List of the Input Graph: \n");
-		// 	G.print();		// prints the adjacent list of the graph
-		// 	cout<<endl;
-		// }
-        //
-		// int x=0 , y=0, s;
-        //
-		// while(s=scanf(" %d %d" , &x , &y) , (s!=EOF)&&(x||y)) {
-		// 	printf("Removing edge between the vertex %d and %d\n" , x , y);
-		// 	G.remove_edge(x , y);
-		// }
-        //
-        // cout<<endl;
-        //
-		// if(!G.empty()) {
-		// 	printf("Adjacency List of the Input Graph: \n");
-		// 	G.print();		// prints the adjacent list of the graph
-		// 	cout<<endl;
-		// }
-        //
-        // G.clear();      	// free the memory allocated to the graph
-		// if(!G.empty()) {
-		// 	printf("Adjacency List of the Input Graph: \n");
-		// 	G.print();		// prints the adjacent list of the graph
-		// 	cout<<endl;
-		// }
 
         Vector <bool> discovered(V , false);
-        Vector <int> ts;    // topological sort
-        Vector <int> traversal;
+        Vector <int> ts;        // topological sort
+        Vector <int> traversal; // will be used for backtracing of the path traversed
 
         // DFS : forest of trees
         bool back_edge_present = false;
@@ -143,19 +117,20 @@ int main() {
                 G.reset_previsit_postvisit();
                 cout<<"Root Node: "<<i<<endl;
                 DFS_recursive(G , i, discovered , ts , traversal);
+
                 Vector<int>::iterator itr1 , itr2;
                 for(itr1 = traversal.begin() ; itr1!=traversal.end() ; ++itr1) {
                     for(itr2 = traversal.begin() ; itr2!=traversal.end(); ++itr2) {
                         if(G.adjacent(*itr1 , *itr2)) {
                             switch (classify_edge(G,traversal , *itr1, *itr2)) {
-                                case BACK_EDGE: cout<<"("<<*itr1<<"->"<<*itr2<<") : BACK_EDGE"<<endl;
+                                case BACK_EDGE: cout<<"("<<*itr1<<"->"<<*itr2<<") : \033[1;34mBACK EDGE\033[0m"<<endl;
                                 back_edge_present=true;
                                 break;
-                                case TREE_EDGE: cout<<"("<<*itr1<<"->"<<*itr2<<") : TREE_EDGE"<<endl;
+                                case TREE_EDGE: cout<<"("<<*itr1<<"->"<<*itr2<<") : \033[1;31mTREE EDGE\033[0m"<<endl;
                                 break;
-                                case FORWARD_EDGE: cout<<"("<<*itr1<<"->"<<*itr2<<") : FORWARD_EDGE"<<endl;
+                                case FORWARD_EDGE: cout<<"("<<*itr1<<"->"<<*itr2<<") : \033[1;32mFORWARD EDGE\033[0m"<<endl;
                                 break;
-                                case CROSS_EDGE: cout<<"("<<*itr1<<"->"<<*itr2<<") : CROSS_EDGE"<<endl;
+                                case CROSS_EDGE: cout<<"("<<*itr1<<"->"<<*itr2<<") : \033[1;33mCROSS EDGE\033[0m"<<endl;
                                 break;
                                 default:
                                 break;
