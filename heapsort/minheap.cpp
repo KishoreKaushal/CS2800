@@ -85,8 +85,41 @@ void heapsort(min_heap &heap) {
 
 #endif
 
+void display_list() {
+    cout<<"1.) Build a heap. "<<endl;
+    cout<<"2.) Insert an element. "<<endl;
+    cout<<"3.) Delete an element. "<<endl;
+    cout<<"4.) Heapsort and Display It."<<endl;
+    cout<<"5.) Display the Heap Tree. "<<endl;
+    cout<<"<0> Exit"<<endl;
+    cout<<"Option [1-5]: ";
+}
 
 int main(int argc, char const *argv[]) {
+    // 1 build a heap
+    // 2 insert an element
+    // 3 delete the minimum element
 
+    // 4 heapsort and display
+    // 5 display the heap
+    int op;
+    display_list();
+    cin>>op;
+    switch(op) {
+        case 0: exit(0);
+        break;
+        case 1:
+        break;
+        case 2:
+        break;
+        case 3:
+        break;
+        case 4:
+        break;
+        case 5:
+        break;
+        default:    cout<<"Wrong choice.. "<<endl;
+        break;
+    }
     return 0;
 }
