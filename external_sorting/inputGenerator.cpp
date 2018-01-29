@@ -13,14 +13,16 @@ int main() {
     char bin_file[] = "input.bin";
     char txt_file[] = "input.txt";
     long long int num;
-
+    int TOTAL_NUM=0;
     FILE *fptr1 = fopen(bin_file , "wb");
     FILE *fptr2 = fopen(txt_file , "w");
 
     if(fptr1 && fptr2) {
         srand(time(NULL));                  // seed for the random number
-        int TOTAL_NUM = rand()%100000 + 50000;
-        TOTAL_NUM = 1000000;
+        // int TOTAL_NUM = rand()%100000 + 50000;
+        cout<<"Total Number : ";
+        cin>>TOTAL_NUM;
+        // TOTAL_NUM = 1000000;
         for(int i=0; i<TOTAL_NUM; i++) {
             num = rand()%MAX_VAL;
             cout<<num<<endl;

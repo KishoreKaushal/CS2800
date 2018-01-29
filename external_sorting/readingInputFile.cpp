@@ -28,7 +28,7 @@ int main() {
     // fread(&num , sizeof( int) , 1 ,fptr1);
     // cout<<num<<endl;
     while(fread(&num, sizeof(int), 1, fptr1)){
-//       cout<<num<<" ";
+       cout<<num<<" ";
     }
     //
     //if(fptr1 && fptr2) {

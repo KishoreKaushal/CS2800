@@ -11,6 +11,7 @@ int main() {
 
     cout<<"Input File Name (Binary-Format) to Sort: ";
     //scanf("%[^\n]s" , file_name[0]);
+    system("cp input.bin input_ren.bin");
     strcpy(file_name[0] , "input.bin");
     cout<<file_name[0]<<endl;
     cout<<"Output File Name: output.txt"<<endl;
@@ -114,17 +115,19 @@ int main() {
         fclose(fptr_out);
     }
 
-    remove("temp.bin");
     /* Converting to human readable format */
 
     FILE *fptr_in = fopen(sorted_fname , "rb");
     FILE *sorted_data = fopen("output.txt" , "w");
-    
+
     while(fread(&num, sizeof(int), 1, fptr_in)){
        // cout<<num<<" ";
        fprintf(sorted_data, "%d\n", num);
     }
-
+    remove("temp.bin");
+    remove("input.bin");
+    system("cp input_ren.bin input.bin");
+    remove("input_ren.bin");
     fclose(fptr_in);
     fclose(sorted_data);
     return 0;

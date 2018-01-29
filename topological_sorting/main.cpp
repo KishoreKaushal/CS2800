@@ -62,9 +62,7 @@ int classify_edge(graph &G, Vector<int> &traversal , int u, int v) {
             }
             --itr;
 			for (int i=idx-1 ; i>=0 && itr!=traversal.rend(); i-- , --itr) {
-                //printf("%d %d\n", __LINE__ , traversal[i]);
                 if(G.adjacent(*itr , v)) {
-				// if(contains_int(&G->adj_list[traversal[i]] , v)) {
 					// first traversal[i](=*itr) having an edge to v :
 					// then this is the parent vertex of v in the DFS tree
 					if(*itr==u) {
