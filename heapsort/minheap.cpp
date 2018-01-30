@@ -126,7 +126,7 @@ struct min_heap {
 /* Build the heap from the array */
 void build_heap(min_heap &heap) {
     int n=heap.size;
-    for(int i=n-1; i>=0; --i) {
+    for(int i=n/2; i>=0; --i) {
         heap.min_heapify(i);
     }
     cout<<"Heap Becomes:"<<endl;
