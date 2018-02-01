@@ -63,11 +63,11 @@ public:
     	// self directed edges are not allowed : i.e x != y
     	if(0<=x && x<total_vertex && 0<=y && y<total_vertex && x!=y){
             adj_list_node p(y);
-            bool present = false;
+            //bool present = false;
             int idx=0;
             for(Vector<adj_list_node>::iterator itr = adj_list[x].begin(); itr!=adj_list[x].end(); ++itr) {
                 if(*itr == p) {
-                    present = true;
+                    //present = true;
                     adj_list[x].erase(idx);
                     break;
                 }
