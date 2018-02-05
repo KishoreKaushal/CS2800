@@ -37,6 +37,7 @@ struct Pair {
     }
     Pair(){}
 
+    /*Operator Overloading*/
     void operator=(const Pair<T1, T2> &P) {
         first = P.first;
         second = P.second;
@@ -63,20 +64,27 @@ struct Pair {
 
 };
 
-
 class min_heap {
 public:
 
     Pair<int , int > H[MAXSIZE]; // heap array
     int size;       // heap size
-
-    min_heap(): size{0} {}
+    int node_index[MAXSIZE];    // to make the decrease_key a constant time operation
+    min_heap(): size{0} {
+        /*Initialization*/
+        for (int i=0; i<MAXSIZE; ++i){
+            node_index[i] = -1;
+        }
+    }
 
     /* returns the minimum element present in the heap : the most prior element in the heap*/
     int extract_min(){
         if(size>0){
             Pair<int , int > minh(H[0]);
             H[0] = H[--size];
+            /*Modifying the node index*/
+            node_index[H[0].second ] = 0;
+            node_index[minh.second] = -1;
             min_heapify(0);
             return minh.second;
         }
@@ -84,18 +92,35 @@ public:
         return INT_MIN;
     }
 
+    bool append_to_heap_array(Pair<int,int> data) {
+        if(size<MAXSIZE) {
+            H[size] = data;
+            node_index[data.second] = size;
+            ++size;
+            return true;
+        }
+        return false;
+    }
+
     /*Returns true if the insertion is successful*/
     bool insert(Pair<int , int > data) {
         if(size<MAXSIZE){
             H[size] = data;
             // cout<<"Inserting Node: "<<data.second<<endl;
-            int i = size;
+            int idx = size;
             Pair<int , int > temp;
-            while(i!=0 && H[PARENT(i)]>H[i]) {
-                temp = H[i];
-                H[i] = H[PARENT(i)];
-                H[PARENT(i)] = temp;
-                i = PARENT(i);
+            while(idx!=0 && H[PARENT(idx)]>H[idx]) {
+                // swap idx and change the index value in the node index
+                int i = node_index[H[PARENT(idx)].second];
+                int j = node_index[H[idx].second];
+                // swap the index
+                node_index[H[PARENT(idx)].second] = j;
+                node_index[H[idx].second] = i;
+
+                temp = H[idx];
+                H[idx] = H[PARENT(idx)];
+                H[PARENT(idx)] = temp;
+                idx = PARENT(idx);
             }
             ++size;
             return true;
@@ -110,8 +135,14 @@ public:
             smallest = LEFT(idx);
         if(RIGHT(idx)<size && H[RIGHT(idx)]< H[smallest])
             smallest = RIGHT(idx);
-        // swap the smallest with the idx
         if(smallest != idx) {
+            // swap the smallest with the idx and change the index value in the node index
+            int i = node_index[ H[smallest].second ];
+            int j = node_index[H[idx].second];
+            // swap the index
+            node_index[ H[smallest].second ] = j;
+            node_index[H[idx].second] = i;
+            // swap the data
             Pair<int , int > temp(H[idx]);
             H[idx] = H[smallest];
             H[smallest] = temp;
@@ -122,25 +153,29 @@ public:
     /*To increase the priority of a certain element at a certain index*/
     void decrease_key(int idx , int new_key) {
         // cout<<"New Key for idx: "<<idx<<" : "<<new_key<<endl;
+        if(idx==-1) return ;
         if(new_key < H[idx].first){
+            // int v = H[idx].second;  // vertex number
             H[idx] = new_key;
             while(idx>0 && H[PARENT(idx)]>H[idx]) {
-                // swap
+                // swap the smallest with the idx and change the index value in the node index
+                int i = node_index[H[PARENT(idx)].second];
+                int j = node_index[H[idx].second];
+                // swap the index
+                node_index[H[PARENT(idx)].second] = j;
+                node_index[H[idx].second] = i;
+                // swap with parent : and change the index of the PARENT
                 Pair<int , int > temp(H[idx]);
                 H[idx] = H[PARENT(idx)];
                 H[PARENT(idx)] = temp;
+                idx = PARENT(idx);
             }
         }
         else cout<<"Attempt to increase the key value using decrease_key()."<<endl;
     }
 
     int get_idx(int v) {
-        for (int i=0; i<size; ++i) {
-            if(H[i].second == v) {
-                return i;
-            }
-        }
-        return -1;
+        return node_index[v];
     }
     void print_heap() {
         cout<<"printing heap:"<<endl;
@@ -148,7 +183,7 @@ public:
             cout<<H[i].first<<" "<<H[i].second<<endl;
         }
     }
-    /* sets the size of teh heap to zero : which in priciple clears the heap*/
+    /* sets the size of the heap to zero : which in priciple clears the heap*/
     void clear() {
         size = 0;
     }
@@ -157,7 +192,6 @@ public:
         return (size==0);
     }
 };
-
 
 void input_data(graph &G) {
     int E;  // total edges
@@ -175,27 +209,35 @@ void Dijkstra(graph &G, int source , int dist[], int prev[]) {
     /*Creating a vertex set*/
     min_heap Q;
     bool *visited = new bool[G.get_total_vertex()];
+
     /* Initialization*/
-    dist[source] = 0;
     for(int i=0; i<G.get_total_vertex(); ++i) {
-        if(i!=source){
             dist[i] = INF;
-        }
         prev[i] = UNDEFINED;
         visited[i] = false;
-        Q.insert(Pair<int,int>(dist[i] , i));
+        /*Appending the information into the heap :
+        constant operation since the vertices are numbered from 0 to N-1*/
+        Q.append_to_heap_array(Pair<int,int>(dist[i] , i));
     }
 
-    // Q.print_heap();
+    /*Initialization of the source vertex distance from the source */
+    /* Decrease is a constant time operation because of maintaining
+    the index array within the class of the min_heap */
+    dist[source] = 0;
+    Q.decrease_key(Q.get_idx(source) , 0);
 
+    //Q.print_heap();
     while(!Q.empty()) {
         /*Extract the node with the minimum distance from the source */
         u = Q.extract_min();
+        // Q.print_heap();
+
         visited[u] = true;
         for(Vector<adj_list_node>::iterator itr = G.adj_list[u].begin(); itr!=G.adj_list[u].end(); ++itr) {
             v = (*itr).node_num;
             if(!visited[v]) {
                 wt = (*itr).weight;
+                // cout<<"dist[u]+wt: "<<dist[u]+wt<<endl;
                 if(dist[u]+wt < dist[v]) {
                     dist[v] = dist[u]+wt;
                     prev[v] = u;
@@ -206,7 +248,6 @@ void Dijkstra(graph &G, int source , int dist[], int prev[]) {
     }
     delete visited;
 }
-
 
 /* Printing the Dijkstra Algorithms Results*/
 void print_dijkstra_results(graph &G, int prev[], int dist[], int source){
