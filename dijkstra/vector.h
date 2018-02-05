@@ -266,7 +266,7 @@ public:
     /* Operator overloading of the []*/
     T& operator[] (int index) {
         if(0 <= index && index < SIZE) {
-            int idx=0;
+            // int idx=0;
             vector_node<T>* nd=FRONT;
             for(int i=1; i<= index; i++) {
                 nd = nd->next;

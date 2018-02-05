@@ -8,12 +8,13 @@
 /* Undirected graph */
 
 #include<iostream>
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include <iomanip>
-#include "graph.h"  // graph implementation
-#include "vector.h" // vector implementation
 #include <climits>
+#include "vector.h" // vector implementation
+#include "graph.h"  // graph implementation
+
 #define MAXSIZE (200)
 #define INF (999999)
 #define UNDEFINED (-1)
@@ -22,7 +23,6 @@
 #define RIGHT(i) ((int)(2*i + 2 ))
 
 using namespace std;
-
 
 /* Currently used for the purpose of storing the node with distance information in the heap*/
 template <typename T1 , typename T2>
@@ -158,6 +158,7 @@ public:
     }
 };
 
+
 void input_data(graph &G) {
     int E;  // total edges
     int u , v , wt;  // u --wt-- v : an edge
@@ -188,13 +189,9 @@ void Dijkstra(graph &G, int source , int dist[], int prev[]) {
     // Q.print_heap();
 
     while(!Q.empty()) {
-        // cout<<endl<<endl;
         /*Extract the node with the minimum distance from the source */
-        // Q.print_heap();
         u = Q.extract_min();
-        // Q.print_heap();
         visited[u] = true;
-        // cout<<"Extracted Min: "<<u<<endl;
         for(Vector<adj_list_node>::iterator itr = G.adj_list[u].begin(); itr!=G.adj_list[u].end(); ++itr) {
             v = (*itr).node_num;
             if(!visited[v]) {
@@ -210,6 +207,8 @@ void Dijkstra(graph &G, int source , int dist[], int prev[]) {
     delete visited;
 }
 
+
+/* Printing the Dijkstra Algorithms Results*/
 void print_dijkstra_results(graph &G, int prev[], int dist[], int source){
     int V = G.get_total_vertex();
     cout<<setw(8)<<"Vertex"<<"\t"<<"\tDist\t"<<"Path"<<endl;
@@ -245,13 +244,14 @@ int main() {
         G.print();                      // print the graph
         int *dist = new int[V];
         int *prev = new int[V];
-        int i=0;
-        // int source = 0;
-        // cin>>source;
-        // for (int i=0; i<V; ++i) {
-            cout<<"Source Vertex: "<<i<<endl;
-            Dijkstra(G, i, dist, prev);
-            print_dijkstra_results(G, prev, dist, i);
+        int source=0;    // source vertex
+        cout<<endl;
+        cin>>source;
+        // for (int source=0; source<V; ++source) {
+            cout<<"Source Vertex: "<<source<<endl;
+            Dijkstra(G, source, dist, prev);
+            print_dijkstra_results(G, prev, dist, source);
+            cout<<endl;
         // }
 
         delete dist;
