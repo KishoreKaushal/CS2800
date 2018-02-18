@@ -218,6 +218,7 @@ void prim(graph &G , int source ) {
 
     for(int i=0; i<G.get_total_vertex(); ++i) {
         prev[i] = UNDEFINED;
+        G.wt_i_prev_i[i] = INF;
         visited[i] = false;
         /*Appending the information into the heap :
         constant operation since the vertices are numbered from 0 to N-1*/
@@ -239,6 +240,7 @@ void prim(graph &G , int source ) {
             idx_v = Q.get_idx(v);
             if(!visited[v] && wt < Q.H[idx_v].first) {
                 prev[v] = u;
+                G.wt_i_prev_i[v] = wt;
                 Q.decrease_key(idx_v , wt);
             }
         }
@@ -251,18 +253,21 @@ void prim(graph &G , int source ) {
             G.mst.push_back(Pair<int,int>(prev[i] , i));
         }
     }
-    delete visited;
-    delete prev;
+    delete [] visited;
+    delete [] prev;
 }
 
 // wrapper function for calling the prims algorithm
 void print_mst(graph &G , int source) {
     prim(G , source);
-    cout<<"MST-PRIM {"<<endl;
+    int total_weight = 0;
+    cout<<"\033[1;31mMST-PRIM \033[0m{"<<endl;
     for(Vector<Pair<int, int>>::iterator itr = G.mst.begin(); itr!=G.mst.end(); ++itr) {
-        cout<<"\t("<<(*itr).first<<" , "<<(*itr).second<<")"<<endl;
+        cout<<"\t{ \033[1;32m("<<(*itr).first<<" , "<<(*itr).second<<")\033[0m : \033[1;33m "<<G.wt_i_prev_i[(*itr).second]<<"\033[0m } ,"<<endl;
+        total_weight+=G.wt_i_prev_i[(*itr).second];
     }
     cout<<"}"<<endl;
+    cout<<"Total Weight: "<<total_weight<<endl;
 }
 
 int main() {

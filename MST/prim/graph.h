@@ -87,6 +87,7 @@ public:
 
     Vector < Vector<adj_list_node> > adj_list;
     Vector <Pair<int, int>> mst;
+    int *wt_i_prev_i;
 
     int get_total_vertex(){
         return total_vertex;
@@ -96,6 +97,7 @@ public:
     graph(int V) :  total_vertex{V} , clock{0} {
         previsit = new int[V]();
         postvisit = new int[V]();
+        wt_i_prev_i = new int[V]();
         pi = new int[V]();
         for(int i=0; i<V; i++) {
             adj_list.push_back(Vector<adj_list_node>(0 , adj_list_node(-1 , -1)));
@@ -169,6 +171,7 @@ public:
         delete [] previsit;
         delete [] postvisit;
         delete [] pi;
+        delete [] wt_i_prev_i;
     }
 
     void print(){
