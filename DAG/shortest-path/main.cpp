@@ -7,45 +7,10 @@
 #define INF 99999
 #define UNDEFINED (-1)
 
-using namespace std;
-
-bool bellman_ford(graph &G , int source ,  int dist[], int prev[]) {
-    int V = G.get_total_vertex();
-    int v , wt;
-    /* Initialization*/
-    for(int i=0; i<V; ++i) {
-        dist[i] = INF;
-        prev[i] = UNDEFINED;
-    }
-    dist[source] = 0;
-    // cout<<"Line: "<<__LINE__<<endl;
-    for(int i=1; i<V ; ++i) {
-        /* Relax each edge */
-        for(int u=0; u<V; ++u) {
-            for(Vector<adj_list_node>::iterator itr = G.adj_list[u].begin(); itr!=G.adj_list[u].end(); ++itr) {
-                v = (*itr).node_num;
-                wt = (*itr).weight;
-                if(dist[u]+wt < dist[v]) {
-                    dist[v] = dist[u]+wt;
-                    prev[v] = u;
-                }
-            }
-        }
-    }
-    // cout<<"Line: "<<__LINE__<<endl;
-    for(int u=0; u<V; ++u) {
-        for(Vector<adj_list_node>::iterator itr = G.adj_list[u].begin(); itr!=G.adj_list[u].end(); ++itr) {
-            v = (*itr).node_num;
-            wt = (*itr).weight;
-            if(dist[u]+wt < dist[v]) {
-                /* Negative Cycle Reachable from Source */
-                return false;
-            }
-        }
-    }
-    // cout<<"Line: "<<__LINE__<<endl;
-    return true;
-}
+#define TREE_EDGE       (0)
+#define FORWARD_EDGE    (1)
+#define CROSS_EDGE      (2)
+#define BACK_EDGE       (3)
 
 
 void input_data(graph &G) {
@@ -79,6 +44,55 @@ void print_single_source_results(graph &G, int prev[], int dist[], int source){
 }
 
 
+/*  recursive implementation of the DFS: assuming the graph is directed acyclic */
+void DFS(graph &G , int V , Vector<bool> &discovered , Vector<int> &ts) {
+	int W;
+	discovered[V] = true;
+    for(auto itr = G.adj_list[V].begin() ; itr!=G.adj_list[V].end() ; ++itr) {
+        W = (*itr).node_num;
+        if(discovered[W] == false) {
+            G.pi[W] = V;
+            DFS(G , W , discovered , ts);
+        }
+    }
+    ts.push_front(V);    // topological sorting
+}
+
+void dag_shortest_path(graph &G , int source , int dist[] , int prev[]) {
+    Vector <bool> discovered(V , false);
+    Vector <int> ts;        // topological sort: most prior element in front
+    int V = G.get_total_vertex();
+    int v , wt;
+
+    /*Topological Sort*/
+    for(int i=0; i<V; ++i) {
+        if(!discovered[i]) {
+            DFS(G , i, discovered , ts);
+        }
+    }
+
+    /* Initialization*/
+    for(int i=0; i<V; ++i) {
+        dist[i] = INF;
+        prev[i] = UNDEFINED;
+    }
+    dist[source] = 0;
+
+    /*for each vertex taken in topological sorted order*/
+    for(auto itr_int = ts.begin() ; itr_int!=ts.end() ; ++itr_int){
+        u = *itr_int;
+        /*Relax each edge*/
+        for(Vector<adj_list_node>::iterator itr = G.adj_list[u].begin(); itr!=G.adj_list[u].end(); ++itr) {
+            v = (*itr).node_num;
+            wt = (*itr).weight;
+            if(dist[u]+wt < dist[v]) {
+                dist[v] = dist[u]+wt;
+                prev[v] = u;
+            }
+        }
+    }
+}
+
 int main() {
     char filename[50];
     printf("Taking input from the file: ");
@@ -94,14 +108,16 @@ int main() {
         input_data(G);                  // input the graph
 
         G.print();                      // print the graph
+
         int *dist = new int[V];
         int *prev = new int[V];
+
         int source=0;    // source vertex
         cout<<endl;
         cin>>source;
         // for (int source=0; source<V; ++source) {
             cout<<"Source Vertex: "<<source<<endl;
-            bellman_ford(G, source, dist, prev);
+            dag_shortest_path(G, source, dist, prev);
             print_single_source_results(G, prev, dist, source);
             cout<<endl;
         // }
