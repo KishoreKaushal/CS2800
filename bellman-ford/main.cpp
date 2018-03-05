@@ -10,6 +10,7 @@
 using namespace std;
 
 bool bellman_ford(graph &G , int source ,  int dist[], int prev[]) {
+    bool updates = false;
     int V = G.get_total_vertex();
     int v , wt;
     /* Initialization*/
@@ -20,6 +21,7 @@ bool bellman_ford(graph &G , int source ,  int dist[], int prev[]) {
     dist[source] = 0;
     // cout<<"Line: "<<__LINE__<<endl;
     for(int i=1; i<V ; ++i) {
+        updates = false;
         /* Relax each edge */
         for(int u=0; u<V; ++u) {
             for(Vector<adj_list_node>::iterator itr = G.adj_list[u].begin(); itr!=G.adj_list[u].end(); ++itr) {
@@ -28,9 +30,11 @@ bool bellman_ford(graph &G , int source ,  int dist[], int prev[]) {
                 if(dist[u]+wt < dist[v]) {
                     dist[v] = dist[u]+wt;
                     prev[v] = u;
+                    updates = true;
                 }
             }
         }
+        if(updates == false ) break;
     }
     // cout<<"Line: "<<__LINE__<<endl;
     for(int u=0; u<V; ++u) {
@@ -80,13 +84,6 @@ void print_single_source_results(graph &G, int prev[], int dist[], int source){
 
 
 int main() {
-    char filename[50];
-    printf("Taking input from the file: ");
-    scanf("%48[^\n]s" , filename);		// input file
-
-    if(freopen(filename,"r",stdin)) {   // redirecting input of the file to the
-										// standard input for the convenience
-
 	    int V;							// total vertex
         scanf(" %d" , &V);				// input the total vertex present
         graph G(V);						// graph declaration
@@ -101,14 +98,13 @@ int main() {
         cin>>source;
         // for (int source=0; source<V; ++source) {
             cout<<"Source Vertex: "<<source<<endl;
-            bellman_ford(G, source, dist, prev);
-            print_single_source_results(G, prev, dist, source);
+            if(bellman_ford(G, source, dist, prev)){
+                print_single_source_results(G, prev, dist, source);
+            } else cout<<"Negative Weighted Cycle Detected."<<endl;
             cout<<endl;
         // }
 
         delete dist;
         delete prev;
-        fclose(stdin);
-    }
     return 0;
 }
