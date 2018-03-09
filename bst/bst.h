@@ -62,12 +62,12 @@ class bst {
         trunk *tnk = new trunk(prev , prev_str);
         print_tree(sub_tree_root->left , tnk , true);
         // if(prev == nullptr) tnk->str = "---";
-        if(!prev) tnk->str = "---";
+        if(!prev) tnk->str = "-->";
         else if(is_left) {
-            tnk->str = ".---";
+            tnk->str = ".-->";
             prev_str = "   |";
         } else {
-            tnk->str = "`---";
+            tnk->str = "`-->";
             prev->str = prev_str;
         }
         show_trunks(tnk);
@@ -214,7 +214,7 @@ public:
 
     bst_node<Key>* successor(bst_node<Key>* x) const {
         if(x==nullptr) return nullptr;
-        if(x->left != nullptr) return get_min(x->right);
+        if(x->right != nullptr) return get_min(x->right);
         bst_node<Key>* y = x->parent;
         while(y!=nullptr and x==y->right) {
             x = y;
