@@ -45,8 +45,10 @@ std::ostream& operator<<(std::ostream& ostr, const bst_node<int>* b) {
 
 template <typename Key>
 class bst {
-    bst_node<Key>* root;
+    /*Private Members and Functions: can be only accessed by member functions*/
+    bst_node<Key>* root;        /*Root of the tree*/
     
+    /*returns the pointer to the node containing the key*/
     bst_node<Key>* get_node_containing(const Key &k) const {
         bst_node<Key>* x = root;
         while(x!=nullptr and k!=x->key){
@@ -56,6 +58,7 @@ class bst {
         return x;
     }
     
+    /*Print the binary tree*/
     void print_tree(bst_node<Key>* sub_tree_root, trunk* prev, bool is_left) {
         if(sub_tree_root == nullptr) return ;
         string prev_str = "    ";
@@ -79,6 +82,7 @@ class bst {
         delete tnk;
     }
         
+    /*Clear the sub tree rooted at x*/
     void clear_sub_tree(bst_node<Key> *x){
         if(x==nullptr) return ;
         clear_sub_tree(x->left);
@@ -86,6 +90,7 @@ class bst {
         delete x;
     }
     
+    /*returns the pointer to the minimum key bst_node*/
     bst_node<Key>* get_min(bst_node<Key>* x) const {
         if(x!=nullptr)
             while(x->left != nullptr) {
@@ -93,6 +98,8 @@ class bst {
             }
         return x;
     }
+
+    /*returns the pointer to the maximum key bst_node*/
     bst_node<Key>* get_max(bst_node<Key>* x) const {
         if(x!=nullptr) 
             while(x->right != nullptr) {
@@ -101,6 +108,7 @@ class bst {
         return x;
     }
     
+    /*utility function to aid remove function: algorithm from thomas cormen*/
     void transplant(bst_node<Key>* u, bst_node<Key>* v) {
         if(u->parent  == nullptr ){ root = v; }
         else if (u == u->parent->left) { u->parent->left = v; }
@@ -108,6 +116,7 @@ class bst {
         if(v!=nullptr) v->parent = u->parent;
     }
 
+    /*removes a node in the tree*/
     void remove(bst_node<Key>* z) {
         // assuming the z is in tree
         // if(z==nullptr || !contains(z->key))   return ;
@@ -127,7 +136,7 @@ class bst {
         delete z;
     }
 
-
+    /*in order traversal : produces a sorted result*/
     void in_order_traversal(bst_node<Key>* x) const {
         if(x!=nullptr){
             in_order_traversal(x->left);
@@ -136,6 +145,7 @@ class bst {
         }
     }
 
+    /*can be used to get postfix notation of an expression*/
     void post_order_traversal(bst_node<Key>* x) const {
         if(x!=nullptr) {
             post_order_traversal(x->left);
@@ -143,7 +153,7 @@ class bst {
             cout<<x->key<<" ";
         }
     }
-
+    /*can be used to get prefix notation of an expression*/
     void pre_order_traversal(bst_node<Key>* x) const {
         if(x!=nullptr) {
             cout<<x->key<<" ";
@@ -152,16 +162,46 @@ class bst {
         }
     }
 
+    /*returns pointer to the node containing the predecessor of the key*/
+    bst_node<Key>* predecessor(bst_node<Key>* x) const {
+        if(x==nullptr) return nullptr;
+        if(x->left != nullptr) return get_max(x->left);
+        bst_node<Key>* y = x->parent;
+        while(y!=nullptr and x==y->left) {
+            x = y;
+            y = y->parent;
+        }
+        return y;
+    }
+    /*returns pointer to the node containing the successor of the key*/
+    bst_node<Key>* successor(bst_node<Key>* x) const {
+        if(x==nullptr) return nullptr;
+        if(x->right != nullptr) return get_min(x->right);
+        bst_node<Key>* y = x->parent;
+        while(y!=nullptr and x==y->right) {
+            x = y;
+            y = y->parent ;
+        }
+        return y;
+    }
+
 public:
+    /*Public functions : can be accessed by anybody*/
+
+    /*Constructor*/
     bst () { root = nullptr; }
 
+    /*returns true if tree is empty*/
     bool empty() const { return (root == nullptr); }
+
+    /*de-allocate the memory allocated to the tree*/
     void clear(){
         clear_sub_tree(root);
         // delete root ;
         root = nullptr;
     }
 
+    /*returns true if the tree contains the key*/
     bool contains(const Key &k) const {
         bst_node<Key>* x = root;
         while(x!=nullptr){
@@ -172,6 +212,7 @@ public:
         return false;
     }
 
+    /*insert the key avoiding duplications*/
     void insert(const Key &k) {
         if(contains(k)){
             cout<<"Avoiding Duplicate Insertion"<<endl;
@@ -192,63 +233,51 @@ public:
         else y->right = z;
     }
 
+    /*public function: wrapper for the remove function*/
     void remove(const Key &k) {
         bst_node<Key>* z = get_node_containing(k);
         if(z!=nullptr) remove(z);
         else cout<<"Can't remove: tree doesn't contain this key."<<endl;
     }
     
+    /*public functions: wrapper for the get_min/get_max function*/
     bst_node<Key>* get_min() const { return get_min(root); }
     bst_node<Key>* get_max() const { return get_max(root); }
-    
-    bst_node<Key>* predecessor(bst_node<Key>* x) const {
-        if(x==nullptr) return nullptr;
-        if(x->left != nullptr) return get_max(x->left);
-        bst_node<Key>* y = x->parent;
-        while(y!=nullptr and x==y->left) {
-            x = y;
-            y = y->parent;
-        }
-        return y;
-    }
 
-    bst_node<Key>* successor(bst_node<Key>* x) const {
-        if(x==nullptr) return nullptr;
-        if(x->right != nullptr) return get_min(x->right);
-        bst_node<Key>* y = x->parent;
-        while(y!=nullptr and x==y->right) {
-            x = y;
-            y = y->parent ;
-        }
-        return y;
-    }
-
+    /*wrapper*/
     bst_node<Key>* predecessor(const Key &k) const {
         bst_node<Key>* x = get_node_containing(k);
         return predecessor(x);
     }
 
+    /*wrapper*/
     bst_node<Key>* successor(const Key &k) const {
         bst_node<Key>* x = get_node_containing(k);
         return successor(x);
     }
 
+    /*wrapper*/
     void in_order_traversal() const {
         in_order_traversal(root);
         cout<<endl;
     }
+    /*wrapper*/
     void post_order_traversal() const {
         post_order_traversal(root);
         cout<<endl;
     }
+    /*wrapper*/
     void pre_order_traversal() const {
         pre_order_traversal(root);
         cout<<endl;
     }
     
+    /*wrapper*/
     void print_tree(){
         print_tree(root, nullptr, false);
     }
+    
+    /*Destructor*/
     ~bst() {clear();}
 };
 
