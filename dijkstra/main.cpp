@@ -23,7 +23,8 @@
 #define RIGHT(i) ((int)(2*i + 2 ))
 
 using namespace std;
-
+#ifndef PAIR
+#define PAIR
 /* Currently used for the purpose of storing the node with distance information in the heap*/
 template <typename T1 , typename T2>
 struct Pair {
@@ -63,7 +64,7 @@ struct Pair {
     }
 
 };
-
+#endif
 class min_heap {
 public:
 
