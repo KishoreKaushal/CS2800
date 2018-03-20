@@ -1,3 +1,14 @@
+/******************************************/
+/*  @KishoreKaushal                       */
+/*  111601008                             */
+/*  ( Unique ) Binary Search Tree         */
+/*  main.cpp                              */
+/******************************************/
+
+/*          use this to compile and run:        */
+/* g++ -std=c++11 -Wall -g main.cpp && ./a.out  */
+
+
 #include<iostream>
 #include "bst.h"
 using namespace std;

@@ -1,3 +1,11 @@
+/******************************************/
+/*  @KishoreKaushal                       */
+/*  111601008                             */
+/*  ( Unique ) Binary Search Tree         */
+/*  bst.h                                 */
+/******************************************/
+
+
 #include<iostream>
 #include<string>
 using namespace std;
@@ -276,7 +284,7 @@ public:
     void print_tree(){
         print_tree(root, nullptr, false);
     }
-    
+
     /*Destructor*/
     ~bst() {clear();}
 };
