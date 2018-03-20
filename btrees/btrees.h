@@ -1,4 +1,5 @@
 #include<iostream>
+#include<string>
 
 using namespace std;
 
@@ -227,7 +228,30 @@ class btrees {
     // void clear();
     ~btrees() { 
         // clear(); 
+    }
+    
+    void print_tree(btree_node<T>* x, string prev_str){
+        for(int i=0; i<x->n; i++){
+            if(!x->leaf){
+                cout << prev_str << "----.\n";
+                print_tree(x -> c[i], prev_str + "    |");
+                cout << prev_str << "----.\n";
+            }
+            cout << prev_str << x -> keys[i] << "\n";
+            // cout << prev_str << "----.\n";
         }
+        if(!x->leaf){
+            cout << prev_str << "----.\n";
+            print_tree(x -> c[x->n], prev_str + "    |");
+            cout << prev_str << "----.\n";
+        }
+    }
+    
+    void print_tree(){
+        for(int i=0; i<50; i++) cout << "*"; cout <<endl<<endl;
+        print_tree(root, "|");
+        for(int i=0; i<50; i++) cout << "*"; cout <<endl<<endl;
+    }
 };
 
 

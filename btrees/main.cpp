@@ -52,7 +52,7 @@ void insert_random(btrees<int> &b) {
 
 
 void disp_menu() {
-    char str[250] = "\n---------------------------------------------------\n1. Insert 1 Key\n2. Insert n random Keys\n3. Search Key\n4. In-Order-Traversal\n0. Exit\nEnter an Option: ";
+    char str[250] = "\n---------------------------------------------------\n1. Insert 1 Key\n2. Insert n random Keys\n3. Search Key\n4. In-Order-Traversal\n5. Print Tree\n0. Exit\nEnter an Option: ";
     cout<<str<<endl;
 }
 
@@ -71,6 +71,7 @@ int main(){
             case 2: insert_random(b); break;
             case 3: search_wrapper(b); break;
             case 4: cout<<"\nIn-Order-Traversal: "; b.in_order_traversal(); cout<<endl; break;
+            case 5: b.print_tree(); break;
             default: cout<<"Wrong Choice."<<endl; break;
         }
     }
