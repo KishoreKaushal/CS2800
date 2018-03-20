@@ -112,18 +112,22 @@ struct btree_node {
     }
 
     /*returns nullptr if not found*/
-    btree_node<T>* search(const T &data)  {
+    btree_node<T>* search(const T &data , const bool &print_flags=false)  {
         /*find the first key greater than or equal to data*/
         int i=0;
         for (i=0; i< n && data > keys[i] ; ++i) ;
         
-        if(data == keys[i]) return this;    /*data is found*/
+        if(data == keys[i]) {
+            if(print_flags) {cout<<",index:{"<<i<<"}"<<endl;}
+            return this;    /*data is found*/
+        }
         
         /*if this is leaf node there will be no child hence return NULL*/
         if(leaf) return nullptr;
         
         /*go to the appropriate child of the child of this node that may contain this data*/
-        return c[i]->search(data);
+        if(print_flags) {cout<<"->child:{"<<i<<"}"; }
+        return c[i]->search(data , print_flags);
     }
 
     /*function to traverse all the nodes in a subtree rooted with this node*/
@@ -147,8 +151,6 @@ struct btree_node {
         }
     }
 
-
-
     ~btree_node() {
         delete [] keys;
         delete [] c;
@@ -169,8 +171,9 @@ class btrees {
     
     /*returns pointer to an internal node in the tree if 
     it contains the gicen key , else returns nullptr*/
-    btree_node<T>* search(const T& ele) const {
-        return (root == nullptr) ? nullptr : root->search(ele);
+    btree_node<T>* search(const T& ele , const bool &print_flags = false) const {
+        if(print_flags) cout<<"root ";
+        return (root == nullptr) ? nullptr : root->search(ele , print_flags);
     }
 
     /*prints the tree in a sorted order by performing 
@@ -218,7 +221,7 @@ class btrees {
     }
     
     bool contains(const T &ele) {
-        return (search(ele)!=nullptr);
+        return (search(ele , false)!=nullptr);
     }
     
     // void clear();
