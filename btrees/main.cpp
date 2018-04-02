@@ -50,9 +50,16 @@ void insert_random(btrees<int> &b) {
     }
 }
 
+void delete_key_wrapper(btrees<int> &b) {
+    int k;
+    cout<<"Enter key to delete: ";
+    cin>>k;
+    b.remove(k);
+    b.print_tree();
+}
 
 void disp_menu() {
-    char str[250] = "\n---------------------------------------------------\n1. Insert 1 Key\n2. Insert n random Keys\n3. Search Key\n4. In-Order-Traversal\n5. Print Tree\n0. Exit\nEnter an Option: ";
+    char str[250] = "\n---------------------------------------------------\n1. Insert 1 Key\n2. Insert n random Keys\n3. Search Key\n4. In-Order-Traversal\n5. Print Tree\n6. Delete Key\n0. Exit\nEnter an Option: ";
     cout<<str<<endl;
 }
 
@@ -72,6 +79,7 @@ int main(){
             case 3: search_wrapper(b); break;
             case 4: cout<<"\nIn-Order-Traversal: "; b.in_order_traversal(); cout<<endl; break;
             case 5: b.print_tree(); break;
+            case 6: delete_key_wrapper(b); break;
             default: cout<<"Wrong Choice."<<endl; break;
         }
     }

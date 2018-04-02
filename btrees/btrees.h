@@ -131,6 +131,13 @@ struct btree_node {
         return c[i]->search(data , print_flags);
     }
 
+    /*returns the index of the key that is greater or equal to k*/
+    int find_key(const T  &k) {
+        int i=0;
+        while (i<n and keys[i] < k) ++i;
+        return i;
+    }
+
     /*function to traverse all the nodes in a subtree rooted with this node*/
     void traverse() const {
         int i;
@@ -152,12 +159,219 @@ struct btree_node {
         }
     }
 
+
+     /*borrows a key from the c[idx-1]-th node and place it in
+    c[idx]th node*/
+    void borrow_from_prev(int idx) {
+        btree_node<T> *child = c[idx];
+        btree_node<T> *sibling = c[idx-1];
+
+        /*moving all key in child c[idx] one step ahead*/
+        for (int i=child->n-1; i>=0 ; --i) {
+            child->keys[i+1] = child->keys[i];
+        }
+        /*moving the child pointers one step ahead*/
+        if(!child->leaf) {
+            for (int i=child->n; i>=0 ; --i) {
+                child->c[i+1] = child->c[i];
+            }
+        }
+        child->keys[0] = keys[idx-1];
+        
+        if(!leaf) {
+            /*sibling's last child becomes the first child of the c[idx]*/
+            child->c[0] = sibling->c[sibling->n];
+        }
+        keys[idx-1] = sibling->keys[sibling->n-1];
+        child->n +=1 ;
+        sibling->n -=1;
+        return ;
+    }
+
+    /*similarly this function borrows from the 
+    c[idx+1]th node and place it in c[idx]th node*/
+    void borrow_from_next(int idx) {
+        btree_node<T>* child = c[idx];
+        btree_node<T>* sibling = c[idx+1];
+        child->keys[(child->n)] = keys[idx];
+
+        if(!child->leaf) {
+            child->c[child->n +1] = sibling->c[0];
+        }
+        keys[idx] = sibling->keys[0];
+
+        /*moving all keys in the sibling to one step back*/
+        for (int i=1; i<sibling->n; ++i){
+            sibling->keys[i-1] = sibling->keys[i];
+        }
+
+        if(!child->leaf) {
+            for (int i=1; i<sibling->n; ++i){
+                sibling->c[i-1] = sibling->c[i];
+            }
+        }
+        child->n +=1;
+        sibling->n -=1;
+        return;
+    }
+
+
+
+    /*to fill up the child node present in the given position 
+    in the child array c[] if that child has less than t-1 keys*/
+    void fill(int idx) {
+        /*previous child c[idx-1] has more than t-1 keys, then borrow a key*/
+        if (idx!=0 && c[idx-1]->n>=t){
+            borrow_from_prev(idx);
+        } else if (idx!=n && c[idx+1]->n>=t) {
+        /*next child c[idx+1] has more than t-1 keys, borrow a key*/
+            borrow_from_next(idx);
+        } else {
+        /*Merge C[idx] with its sibling
+        if C[idx] is the last child, merge it with with its previous sibling, otherwise merge it with its next sibling*/
+            if (idx != n){
+                merge(idx);
+            } else{
+                merge(idx-1);
+            }
+        }
+    }
+
+    /*merges the idx-th child of the node with (idx+1) the child of the node*/
+    void merge(int idx) {
+        btree_node<T> *child = c[idx];
+        btree_node<T> *sibling = c[idx+1];
+
+        /* Pulling a key from the current node and inserting it into (t-1)th position of c[idx] child->keys[t-1] = keys[idx];
+        */
+        // Copying the keys from c[idx+1] to c[idx] at the end
+        for (int i=0; i<sibling->n; ++i)
+            child->keys[i+t] = sibling->keys[i];
+
+        // Copying the child pointers from c[idx+1] to c[idx]
+        if (!child->leaf) {
+            for(int i=0; i<=sibling->n; ++i)
+                child->c[i+t] = sibling->c[i];
+        }
+
+        // Moving all keys after idx in the current node one step before -
+        // to fill the gap created by moving keys[idx] to c[idx]
+        for (int i=idx+1; i<n; ++i)
+            keys[i-1] = keys[i];
+
+        // Moving the child pointers after (idx+1) in the current node one
+        // step before
+        for (int i=idx+2; i<=n; ++i)
+            c[i-1] = c[i];
+
+        // Updating the key count of child and the current node
+        child->n += sibling->n+1;
+        n--;
+
+        // Freeing the memory occupied by sibling
+        delete sibling;
+        return;
+    }
+
+    /*returns the predecessor of the key where the key is present in the give index
+    position in the node*/
+    T predecessor(int idx) {
+        btree_node<T> *cur = c[idx];
+        while(!cur -> leaf) {
+            cur = cur->c[cur->n];
+        }
+        return cur->keys[cur->n-1];
+    }
+
+    /*returns the successor of the key where the key is present in the give index
+    position in the node*/
+    T successor(int idx) {
+        btree_node<T>* suc = c[idx+1];
+        while(!suc->leaf) {
+            suc = suc->c[0];
+        }
+        return suc->keys[0];
+    }
+   
+
+
+    /*removes the key present in at the 
+    given location in this node which is
+    a leaf node*/
+    void remove_from_leaf(int &idx) {
+        for (int i=idx+1; i<n; ++i) {
+            keys[i-1] = keys[i];
+        }
+        n--;
+    }
+    
+    /*removes the key present in at the 
+    given location in this node which is
+    a non-leaf node*/
+    void remove_from_non_leaf(int &idx) {
+        int k = keys[idx];
+
+        if(t <= c[idx]->n) {
+            /*if the child preceding k has atleat t keys*/
+            T pred = predecessor(idx);
+            keys[idx] = pred;
+            c[idx]->remove(pred);
+        } else if(t <= c[idx+1]->n) {
+            /*if the child c[idx+1] has atleast t keys*/
+            T succ = successor(idx);
+            keys[idx] = succ;
+            c[idx+1]->remove(succ);
+        } else {
+            /*if both c[idx] and c[idx+1] has less than t keys, merge them*/
+            merge(idx);
+            /*remove the key in the resulting node*/
+            c[idx]->remove(k);
+        }
+        return;
+    }
+
+
+    /*wrapper to remove a key in 
+    subtree rooted with this node*/
+    void remove(const T &k) {
+        /*get the index of the key that is greater or equal to k*/
+        int idx = find_key(k);
+        
+        if(idx < n and keys[idx] == k) {
+            /*the key is present in this node*/
+            if(leaf) remove_from_leaf(idx);
+            else remove_from_non_leaf(idx);
+        } else {
+            if (leaf) {
+                /*if this node is leaf 
+                then key is not present in the tree*/
+                cout<<"Key not present in the tree."<<endl;
+                return;
+            }
+            bool flag = ( (idx==n)? true : false );
+
+            /*child containing the key has less than `t` keys, fill that child*/
+            if(c[idx]->n < t) {
+                fill(idx);
+            }
+
+            if(flag and idx>n) {
+                /* if the last child has been merged*/
+                c[idx-1]->remove(k);
+            } else {
+                c[idx]->remove(k);
+            }
+        }
+        return;
+    }
+
+
+
     ~btree_node() {
         delete [] keys;
         delete [] c;
     }
 
-    // friend class btrees;
 };
 
 
@@ -248,9 +462,25 @@ class btrees {
     }
     
     void print_tree(){
+        if(root==nullptr) return;
         for(int i=0; i<50; i++) cout << "*"; cout <<endl<<endl;
         print_tree(root, "|");
         for(int i=0; i<50; i++) cout << "*"; cout <<endl<<endl;
+    }
+    void remove(const T& k) {
+        if(root == nullptr) {
+            cout<<"Tree is empty"<<endl;
+            return;
+        }
+        root->remove(k);
+        
+        if(root->n == 0) {
+            btree_node<T> *tmp = root;
+            if(root->leaf) { root = nullptr; }
+            else root = root->c[0];
+            delete  tmp;
+        }
+        return;
     }
 };
 
